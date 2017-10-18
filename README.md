@@ -1,4 +1,4 @@
-<h1 align="center">trivor-nlp</h1>
+# trivor-nlp [![CircleCI](https://circleci.com/gh/kalnee/trivor-nlp/tree/master.svg?style=svg)](https://circleci.com/gh/kalnee/trivor-nlp/tree/master)
 
 <h5 align="center">Library to detect and generate insights over spoken language found in Movies and TV Shows.</h5>
 
