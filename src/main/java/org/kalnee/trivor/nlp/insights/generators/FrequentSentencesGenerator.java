@@ -24,7 +24,7 @@ package org.kalnee.trivor.nlp.insights.generators;
 
 import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.domain.SentenceFrequency;
-import org.kalnee.trivor.nlp.domain.Subtitle;
+import org.kalnee.trivor.nlp.domain.Sentence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,14 +45,14 @@ public class FrequentSentencesGenerator implements Generator<List<SentenceFreque
     }
 
     @Override
-    public List<SentenceFrequency> generate(Subtitle subtitle) {
-        final Map<String, Long> words = subtitle.getSentences().parallelStream()
+    public List<SentenceFrequency> generate(List<Sentence> sentences) {
+        final Map<String, Long> matchedSentences = sentences.parallelStream()
                 .filter(s -> s.getTokens().size() > 3)
                 .map(Sentence::getSentence)
                 .map(s -> s.replaceAll("\\.", ""))
                 .collect(groupingBy(Function.identity(), counting()));
 
-        final List<SentenceFrequency> sortedSentences = words.entrySet().parallelStream()
+        final List<SentenceFrequency> sortedSentences = matchedSentences.entrySet().parallelStream()
                 .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
                 .filter(e -> e.getValue() > 1)
                 .map(e -> new SentenceFrequency(e.getKey(), e.getValue()))

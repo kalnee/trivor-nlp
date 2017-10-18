@@ -48,7 +48,7 @@ public class PresentPerfectGeneratorTest {
   @Test
   public void testFindPresentPerfect() throws IOException {
     final PresentPerfectGenerator spg = new PresentPerfectGenerator();
-    final List<String> insight = spg.generate(getSubtitle());
+    final List<String> insight = spg.generate(getSubtitle().getSentences());
 
     assertTrue("should've have identified 3 sentences", 3 == insight.size());
   }

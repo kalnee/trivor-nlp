@@ -22,26 +22,31 @@
 
 package org.kalnee.trivor.nlp.handlers;
 
-import java.util.stream.Stream;
+import java.net.URI;
+import java.util.Objects;
 
-/**
- * A handler for a subtitle source.
- *
- * The <tt>SubtitleHandler</tt> interface provides a method that returns
- * all lines of a subtitle.
- *
- * @see FileSubtitleHandler
- * @see S3SubtitleHandler
- * @see SubtitleHandlerFactory
- *
- * @since 0.0.1
- */
-public interface SubtitleHandler {
+public class FileHandlerFactory {
 
-    /**
-     * Returns the lines of a subtitle file from different sources.
-     *
-     * @return subtitle lines as a Stream
-     */
-    Stream<String> lines();
+	private final URI uri;
+
+	private FileHandlerFactory(URI uri) {
+		this.uri = uri;
+	}
+
+	public static FileHandlerFactory create(URI uri) {
+		Objects.nonNull(uri);
+		return new FileHandlerFactory(uri);
+	}
+
+	public FileHandler getHandler() {
+		switch (uri.getScheme()) {
+		case S3FileHandler.S3_SCHEME:
+			return new S3FileHandler(uri);
+		case FileFileHandler.FILE_SCHEME:
+		case FileFileHandler.JAR_SCHEME:
+			return new FileFileHandler(uri);
+		default:
+			throw new IllegalStateException("no implementation found for scheme " + uri.getScheme());
+		}
+	}
 }

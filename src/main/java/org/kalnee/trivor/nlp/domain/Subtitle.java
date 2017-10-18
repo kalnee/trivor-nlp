@@ -39,13 +39,18 @@ public class Subtitle {
         this.sentences = sentences;
     }
 
-    public Subtitle(Integer duration, List<Sentence> sentences) {
+    public Subtitle(List<Sentence> sentences, Integer duration) {
         this(sentences);
         this.duration = duration;
     }
 
-    public Subtitle(Integer duration, List<Sentence> sentences, Map<SentimentEnum, BigDecimal> sentiment) {
-        this(duration, sentences);
+    public Subtitle(List<Sentence> sentences, Map<SentimentEnum, BigDecimal> sentiment) {
+        this(sentences);
+        this.sentiment = sentiment;
+    }
+
+    public Subtitle(List<Sentence> sentences, Integer duration, Map<SentimentEnum, BigDecimal> sentiment) {
+        this(sentences, duration);
         this.sentiment = sentiment;
     }
 

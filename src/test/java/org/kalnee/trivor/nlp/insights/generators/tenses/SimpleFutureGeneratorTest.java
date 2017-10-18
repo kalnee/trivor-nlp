@@ -48,7 +48,7 @@ public class SimpleFutureGeneratorTest {
   @Test
   public void testFindSimpleFuture() throws IOException {
     final SimpleFutureGenerator spg = new SimpleFutureGenerator();
-    final List<String> insight = spg.generate(getSubtitle());
+    final List<String> insight = spg.generate(getSubtitle().getSentences());
 
     assertTrue("should've have identified 3 sentences", 3 == insight.size());
   }

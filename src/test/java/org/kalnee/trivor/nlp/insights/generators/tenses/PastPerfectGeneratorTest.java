@@ -48,7 +48,7 @@ public class PastPerfectGeneratorTest {
   @Test
   public void testFindPastPerfect() throws IOException {
     final PastPerfectGenerator spg = new PastPerfectGenerator();
-    final List<String> insight = spg.generate(getSubtitle());
+    final List<String> insight = spg.generate(getSubtitle().getSentences());
 
     assertTrue("should've have identified 3 sentences", 3 == insight.size());
   }

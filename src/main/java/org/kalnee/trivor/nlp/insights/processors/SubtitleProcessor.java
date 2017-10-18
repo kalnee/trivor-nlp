@@ -22,30 +22,24 @@
 
 package org.kalnee.trivor.nlp.insights.processors;
 
-import org.kalnee.trivor.nlp.domain.*;
-import org.kalnee.trivor.nlp.handlers.SubtitleHandler;
-import org.kalnee.trivor.nlp.handlers.SubtitleHandlerFactory;
-import org.kalnee.trivor.nlp.nlp.models.*;
+import org.kalnee.trivor.nlp.domain.Result;
+import org.kalnee.trivor.nlp.domain.Subtitle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.math.BigDecimal;
 import java.net.URI;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-import static java.lang.System.lineSeparator;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.SPACE;
 
-public class SubtitleProcessor {
+public class SubtitleProcessor extends Processor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SubtitleProcessor.class);
-    private static final String SPACES_REGEX = "\\s+";
+
     private static final String SUBTITLE_INDEX_REGEX = "^(\\d+)$";
     private static final String SUBTITLE_TIME_REGEX = "^((\\d+.*)\\s-->\\s(\\d+.*))$";
     private static final String SUBTITLE_DIALOG_REGEX = "^\\s*-|_\\s*";
@@ -63,85 +57,51 @@ public class SubtitleProcessor {
     private static final String SUBTITLE_ADS_REGEX =
             ".*(Subtitle|subtitle|sync by|Sync by|Downloaded|VIP|Synchronized by|Created by).*";
 
-    private final URI uri;
-    private final SentenceDetector sentenceDetector;
-    private final SimpleTokenizer tokenizer;
-    private final POSTagger tagger;
-    private final Lemmatizer lemmatizer;
-    private final Chunker chunker;
-    private final SentimentAnalyser sentimentAnalyser;
     private final InsightsProcessor insightsProcessor;
-    private String content;
+
     private Subtitle subtitle;
+
     private Result result;
     private Integer duration;
 
     private SubtitleProcessor(URI uri, Integer duration) {
-        this.uri = uri;
+        super(uri);
         this.duration = duration;
-        this.sentenceDetector = new SentenceDetector();
-        this.tokenizer = new SimpleTokenizer();
-        this.tagger = new POSTagger();
-        this.lemmatizer = new Lemmatizer();
-        this.chunker = new Chunker();
-        this.sentimentAnalyser = new SentimentAnalyser();
         this.insightsProcessor = new InsightsProcessor();
     }
 
-    private void preProcess(URI uri) {
-        final SubtitleHandler subtitleHandler = SubtitleHandlerFactory.create(uri).getHandler();
-        final String lines = subtitleHandler.lines().collect(joining(lineSeparator()));
-
-        content = Stream.of(lines.split(lineSeparator()))
-                .filter(line -> !line.matches(SUBTITLE_INDEX_REGEX))
-                .filter(line -> !line.matches(SUBTITLE_TIME_REGEX))
-                .filter(line -> !line.matches(SUBTITLE_SONG_REGEX))
-                .filter(line -> !line.matches(SUBTITLE_URL_REGEX))
-                .filter(line -> !line.matches(SUBTITLE_PREVIOUS_REGEX))
-                .filter(line -> !line.matches(SUBTITLE_ADS_REGEX))
-                .map(line -> line.replaceAll(SUBTITLE_DIALOG_REGEX, EMPTY))
-                .map(line -> line.replaceAll(SUBTITLE_HTML_REGEX, EMPTY))
-                .map(line -> line.replaceAll(SUBTITLE_CC_REGEX, EMPTY))
-                .map(line -> line.replaceAll(SUBTITLE_CC2_REGEX, EMPTY))
-                .map(line -> line.replaceAll(SUBTITLE_CC_INITIAL_REGEX, EMPTY))
-                .map(line -> line.replaceAll(SUBTITLE_CC_FINAL_REGEX, EMPTY))
-                .map(line -> line.replaceAll(SUBTITLE_CHARACTER_REGEX, EMPTY))
-                .map(line -> line.replaceAll(SUBTITLE_INITIAL_QUOTE_REGEX, SPACE))
-                .map(line -> line.replaceAll(SUBTITLE_FINAL_QUOTE_REGEX, SPACE))
-                .map(String::trim)
-                .collect(joining(" "));
+    @Override
+    List<Predicate<String>> getFilters() {
+        return Arrays.asList(
+                line -> !line.matches(SUBTITLE_INDEX_REGEX),
+                line -> !line.matches(SUBTITLE_TIME_REGEX),
+                line -> !line.matches(SUBTITLE_SONG_REGEX),
+                line -> !line.matches(SUBTITLE_URL_REGEX),
+                line -> !line.matches(SUBTITLE_PREVIOUS_REGEX),
+                line -> !line.matches(SUBTITLE_ADS_REGEX)
+        );
     }
 
-    private void process() {
-        preProcess(uri);
-
-        final List<String> detectedSentences = sentenceDetector.detect(content)
-                .stream()
-                .map(s -> s.replaceAll(SPACES_REGEX, SPACE))
-                .collect(toList());
-
-        final List<Sentence> sentences = detectedSentences.stream().map(s -> {
-            final List<String> rawTokens = tokenizer.tokenize(s);
-            final List<String> tags = tagger.tag(rawTokens);
-            final List<Double> probs = tagger.probs();
-            final List<String> lemmas = lemmatizer.lemmatize(rawTokens, tags);
-            final List<Chunk> chunks = chunker.chunk(rawTokens, tags, probs);
-
-            final List<Token> tokens = new ArrayList<>();
-
-            for (int i = 0; i < rawTokens.size(); i++) {
-                tokens.add(new Token(rawTokens.get(i), tags.get(i), lemmas.get(i), probs.get(i)));
-            }
-
-            return new Sentence(s, tokens, chunks);
-        }).collect(toList());
-        final Map<SentimentEnum, BigDecimal> sentiment = sentimentAnalyser.categorize(
-                sentences.stream().map(Sentence::getSentence).collect(toList())
+    @Override
+    List<Function<String, String>> getMappers() {
+        return Arrays.asList(
+                line -> line.replaceAll(SUBTITLE_DIALOG_REGEX, EMPTY),
+                line -> line.replaceAll(SUBTITLE_HTML_REGEX, EMPTY),
+                line -> line.replaceAll(SUBTITLE_CC_REGEX, EMPTY),
+                line -> line.replaceAll(SUBTITLE_CC2_REGEX, EMPTY),
+                line -> line.replaceAll(SUBTITLE_CC_INITIAL_REGEX, EMPTY),
+                line -> line.replaceAll(SUBTITLE_CC_FINAL_REGEX, EMPTY),
+                line -> line.replaceAll(SUBTITLE_CHARACTER_REGEX, EMPTY),
+                line -> line.replaceAll(SUBTITLE_INITIAL_QUOTE_REGEX, SPACE),
+                line -> line.replaceAll(SUBTITLE_FINAL_QUOTE_REGEX, SPACE)
         );
-        subtitle = new Subtitle(duration, sentences, sentiment);
+    }
 
-        LOGGER.info("Subtitle generated successfully");
+    @Override
+    void process() {
+        super.process();
 
+        subtitle = new Subtitle(getSentences(), duration, getSentiment());
         result = insightsProcessor.process(subtitle);
     }
 

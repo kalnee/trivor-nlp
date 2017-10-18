@@ -23,7 +23,7 @@
 package org.kalnee.trivor.nlp.insights.generators.vocabulary;
 
 import org.kalnee.trivor.nlp.domain.InsightsEnum;
-import org.kalnee.trivor.nlp.domain.Subtitle;
+import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.domain.TagsEnum;
 import org.kalnee.trivor.nlp.domain.WordUsage;
 import org.kalnee.trivor.nlp.insights.generators.Generator;
@@ -56,8 +56,8 @@ public class PrepositionGenerator extends WordUsageGenerator implements Generato
 	}
 
 	@Override
-	public List<WordUsage> generate(Subtitle subtitle) {
-		final List<WordUsage> words = getSentences(subtitle);
+	public List<WordUsage> generate(List<Sentence> sentences) {
+		final List<WordUsage> words = getSentences(sentences);
 		LOGGER.info("{} - {}", getCode(), getExamples(words));
 
     	return words;

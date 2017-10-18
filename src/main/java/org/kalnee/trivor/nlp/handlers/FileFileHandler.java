@@ -20,49 +20,56 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.kalnee.trivor.nlp.insights.generators.vocabulary;
+package org.kalnee.trivor.nlp.handlers;
 
-import org.kalnee.trivor.nlp.domain.Sentence;
-import org.kalnee.trivor.nlp.domain.WordUsage;
-import org.kalnee.trivor.nlp.insights.generators.Generator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.kalnee.trivor.nlp.domain.InsightsEnum.WH_USAGE;
-import static org.kalnee.trivor.nlp.domain.TagsEnum.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.util.stream.Stream;
 
 /**
- * Sentence generator for wh words.
+ * File handler implementation of the <tt>SubtitleHandler</tt> interface. it accepts
+ * both plain text files and jar files.
  *
- * @see WordUsageGenerator
- * @see Generator
+ * @see FileHandler
+ * @see FileHandlerFactory
  *
  * @since 0.0.1
  */
-public class WhWordsGenerator extends WordUsageGenerator implements Generator<List<WordUsage>> {
+class FileFileHandler implements FileHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(WhWordsGenerator.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileFileHandler.class);
 
-    @Override
-    List<String> getTags() {
-        return Arrays.asList(
-                WDT.name(), WP.name(), WP$.name(), WRB.name()
-        );
+    static final String FILE_SCHEME = "file";
+    static final String JAR_SCHEME = "jar";
+
+    /**
+     * File uri
+     */
+    private final URI uri;
+
+    /**
+     * Constructs a file handler for an uri
+     *
+     * @param  uri  the file uri
+     */
+    public FileFileHandler(URI uri) {
+        this.uri = uri;
     }
 
     @Override
-    public String getCode() {
-        return WH_USAGE.getCode();
-    }
-
-    @Override
-    public List<WordUsage> generate(List<Sentence> sentences) {
-        final List<WordUsage> words = getSentences(sentences);
-        LOGGER.info("{} - {}", getCode(), getExamples(words));
-
-        return words;
+    public Stream<String> lines() {
+        try {
+            final InputStream stream = uri.toURL().openStream();
+            return new BufferedReader(new InputStreamReader(stream)).lines();
+        } catch (IOException e) {
+            LOGGER.error("file not found", e);
+            throw new IllegalStateException(e);
+        }
     }
 }

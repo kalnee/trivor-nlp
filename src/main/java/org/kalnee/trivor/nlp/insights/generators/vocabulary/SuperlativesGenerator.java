@@ -22,7 +22,7 @@
 
 package org.kalnee.trivor.nlp.insights.generators.vocabulary;
 
-import org.kalnee.trivor.nlp.domain.Subtitle;
+import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.domain.WordUsage;
 import org.kalnee.trivor.nlp.insights.generators.Generator;
 import org.slf4j.Logger;
@@ -58,9 +58,9 @@ public class SuperlativesGenerator extends WordUsageGenerator implements Generat
 	}
 
 	@Override
-	public List<WordUsage> generate(Subtitle subtitle) {
+	public List<WordUsage> generate(List<Sentence> sentences) {
 		final List<WordUsage> words = getSentences(
-				subtitle, t -> t.getToken().toLowerCase(), w -> !NOT_ADJECTIVES.contains(w)
+				sentences, t -> t.getToken().toLowerCase(), w -> !NOT_ADJECTIVES.contains(w)
 		);
 		LOGGER.info("{} - {}", getCode(), getExamples(words));
 

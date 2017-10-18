@@ -24,9 +24,11 @@ package org.kalnee.trivor.nlp.insights.generators;
 
 import org.kalnee.trivor.nlp.domain.RateOfSpeech;
 import org.kalnee.trivor.nlp.domain.RateOfSpeechEnum;
-import org.kalnee.trivor.nlp.domain.Subtitle;
+import org.kalnee.trivor.nlp.domain.Sentence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 import static org.kalnee.trivor.nlp.domain.InsightsEnum.RATE_OF_SPEECH;
 import static org.kalnee.trivor.nlp.domain.RateOfSpeechEnum.*;
@@ -46,29 +48,30 @@ public class RateOfSpeechGenerator implements Generator<RateOfSpeech> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RateOfSpeechGenerator.class);
 
+    private final Integer duration;
+
+    public RateOfSpeechGenerator(Integer duration) {
+        this.duration = duration;
+    }
+
     @Override
     public String getCode() {
         return RATE_OF_SPEECH.getCode();
     }
 
     @Override
-    public boolean shouldRun(Subtitle subtitle) {
-        return subtitle.getDuration() != null && subtitle.getDuration() > 0;
-    }
-
-    @Override
-    public RateOfSpeech generate(Subtitle subtitle) {
+    public RateOfSpeech generate(List<Sentence> sentences) {
         RateOfSpeechEnum rateOfSpeech = NONE;
 
-        if (!shouldRun(subtitle)) {
+        if (!(duration != null && duration > 0)) {
             return new RateOfSpeech(rateOfSpeech);
         }
 
-        final Long words = subtitle.getSentences().parallelStream()
+        final Long words = sentences.parallelStream()
                 .flatMap(s -> s.getTokens().stream())
                 .filter(t -> t.getToken().length() > 1)
                 .count();
-        final Long wpm = words / subtitle.getDuration();
+        final Long wpm = words / duration;
 
         if (wpm < 70) {
             rateOfSpeech = SLOW;
@@ -80,7 +83,7 @@ public class RateOfSpeechGenerator implements Generator<RateOfSpeech> {
             rateOfSpeech = SUPER_FAST;
         }
 
-        LOGGER.info("{}: {}w / {}m = {}wpm ({})", getCode(), words, subtitle.getDuration(), wpm, rateOfSpeech);
+        LOGGER.info("{}: {}w / {}m = {}wpm ({})", getCode(), words, duration, wpm, rateOfSpeech);
         return new RateOfSpeech(rateOfSpeech, wpm);
     }
 }

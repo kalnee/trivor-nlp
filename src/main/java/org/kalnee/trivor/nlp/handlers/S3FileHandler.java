@@ -38,14 +38,14 @@ import java.util.stream.Stream;
 /**
  * AWS S3 bucket handler implementation of the <tt>SubtitleHandler</tt> interface.
  *
- * @see SubtitleHandler
- * @see SubtitleHandlerFactory
+ * @see FileHandler
+ * @see FileHandlerFactory
  *
  * @since 0.0.1
  */
-class S3SubtitleHandler implements SubtitleHandler {
+class S3FileHandler implements FileHandler {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(FileSubtitleHandler.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(FileFileHandler.class);
 
 	static final String S3_SCHEME = "s3";
 
@@ -57,7 +57,7 @@ class S3SubtitleHandler implements SubtitleHandler {
 	 *
 	 * @param  uri  the file uri
 	 */
-	S3SubtitleHandler(URI uri) {
+	S3FileHandler(URI uri) {
 		this.uri = uri;
 		this.s3Client = new AmazonS3Client();
 	}

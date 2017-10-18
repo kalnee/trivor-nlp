@@ -47,7 +47,7 @@ public class PastProgressiveGeneratorTest {
   @Test
   public void testFindPastProgressive() throws IOException {
     final PastProgressiveGenerator ppg = new PastProgressiveGenerator();
-    final List<String> insight = ppg.generate(getSubtitle());
+    final List<String> insight = ppg.generate(getSubtitle().getSentences());
 
     assertTrue("should've have identified 3 sentences", 3 == insight.size());
   }

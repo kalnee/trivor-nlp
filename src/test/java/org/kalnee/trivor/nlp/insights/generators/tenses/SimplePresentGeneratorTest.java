@@ -48,7 +48,7 @@ public class SimplePresentGeneratorTest {
   @Test
   public void testFindSimplePresent() throws IOException {
     final SimplePresentGenerator spg = new SimplePresentGenerator();
-    final List<String> insight = spg.generate(getSubtitle());
+    final List<String> insight = spg.generate(getSubtitle().getSentences());
 
     assertTrue("should've have identified 3 sentences", 3 == insight.size());
   }

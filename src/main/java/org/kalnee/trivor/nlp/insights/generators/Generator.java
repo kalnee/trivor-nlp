@@ -22,15 +22,13 @@
 
 package org.kalnee.trivor.nlp.insights.generators;
 
-import org.kalnee.trivor.nlp.domain.Subtitle;
+import org.kalnee.trivor.nlp.domain.Sentence;
+
+import java.util.List;
 
 public interface Generator<T> {
 
     String getCode();
 
-    T generate(Subtitle subtitle);
-
-    default boolean shouldRun(Subtitle subtitle) {
-        return true;
-    }
+    T generate(List<Sentence> sentences);
 }

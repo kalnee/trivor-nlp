@@ -48,7 +48,7 @@ public class NonSentencesGeneratorTest {
   @Test
   public void testFindNonSentences() throws IOException {
     final NonSentencesGenerator spg = new NonSentencesGenerator();
-    final List<String> insight = spg.generate(getSubtitle());
+    final List<String> insight = spg.generate(getSubtitle().getSentences());
 
     assertTrue("should've have identified 3 sentences", 3 == insight.size());
   }

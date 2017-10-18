@@ -23,9 +23,11 @@
 package org.kalnee.trivor.nlp.insights.generators;
 
 
-import org.kalnee.trivor.nlp.domain.Subtitle;
+import org.kalnee.trivor.nlp.domain.Sentence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 import static org.kalnee.trivor.nlp.domain.InsightsEnum.NUMBER_SENTENCES;
 
@@ -38,8 +40,9 @@ public class NumberOfSentencesGenerator implements Generator<Integer> {
 		return NUMBER_SENTENCES.getCode();
 	}
 
-	public Integer generate(Subtitle subtitle) {
-		LOGGER.info("{}: {}", getCode(), subtitle.getSentences().size());
-		return subtitle.getSentences().size();
+	@Override
+	public Integer generate(List<Sentence> sentences) {
+		LOGGER.info("{}: {}", getCode(), sentences.size());
+		return sentences.size();
 	}
 }

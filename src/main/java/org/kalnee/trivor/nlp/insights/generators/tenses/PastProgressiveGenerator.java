@@ -23,7 +23,7 @@
 package org.kalnee.trivor.nlp.insights.generators.tenses;
 
 import org.kalnee.trivor.nlp.domain.Sentence;
-import org.kalnee.trivor.nlp.domain.Subtitle;
+import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.insights.generators.Generator;
 import org.kalnee.trivor.nlp.utils.CollectionUtils;
 import org.slf4j.Logger;
@@ -57,18 +57,18 @@ public class PastProgressiveGenerator implements Generator<List<String>> {
     }
 
     @Override
-    public List<String> generate(Subtitle subtitle) {
-        final List<String> sentences = subtitle.getSentences().stream()
+    public List<String> generate(List<Sentence> sentences) {
+        final List<String> matchedSentences = sentences.stream()
                 .filter(s -> CollectionUtils.allMatch(s.getSentenceTags(), MUST_CONTAIN)
                         && CollectionUtils.noneMatch(s.getSentence().toLowerCase(), MUST_NOT_CONTAIN_WORDS))
                 .map(Sentence::getSentence)
                 .collect(toList());
 
         LOGGER.info(
-                format("%s: %d/%d (%.2f%%)", getCode(), sentences.size(), subtitle.getSentences().size(),
-                (sentences.size() * 100d / subtitle.getSentences().size()))
+                format("%s: %d/%d (%.2f%%)", getCode(), matchedSentences.size(), sentences.size(),
+                (matchedSentences.size() * 100d / sentences.size()))
         );
 
-        return sentences;
+        return matchedSentences;
     }
 }
