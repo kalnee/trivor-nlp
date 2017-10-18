@@ -11,4 +11,26 @@ After processing all sentences, several generators will produce valuable informa
 
 ## Usage
 
-`$ ./gradlew clean build`
+### Add dependency
+```xml
+<dependency>
+  <groupId>org.kalnee</groupId>
+  <artifactId>trivor-nlp</artifactId>
+  <version>0.0.1-alpha.0</version>
+</dependency>
+```
+
+### Build a SubtitleProcessor
+
+```java
+final SubtitleProcessor sp = new SubtitleProcessor.Builder(uri).withDuration(43).build();
+```
+
+```java
+sp.getSentences(); // return each identified sentence and its properties such as tokens.
+sp.getResult(); // return the result from several insight generators such as vocabulary.
+```
+
+## License
+
+MIT (c) Kalnee. See [LICENSE](https://github.com/kalnee/trivor-nlp/blob/master/LICENSE.md) for details.
