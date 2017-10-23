@@ -23,7 +23,7 @@
 package org.kalnee.trivor.nlp.insights.generators.vocabulary;
 
 
-import org.kalnee.trivor.nlp.domain.Subtitle;
+import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.domain.WordUsage;
 import org.kalnee.trivor.nlp.insights.generators.Generator;
 import org.slf4j.Logger;
@@ -60,8 +60,8 @@ public class NounsGenerator extends WordUsageGenerator implements Generator<List
 	}
 
 	@Override
-	public List<WordUsage> generate(Subtitle subtitle) {
-		final List<WordUsage> words = getSentences(subtitle, w -> !MOST_COMMON_WORDS.contains(w));
+	public List<WordUsage> generate(List<Sentence> sentences) {
+		final List<WordUsage> words = getSentences(sentences, w -> !MOST_COMMON_WORDS.contains(w));
 		LOGGER.info("{} - {}", getCode(), getExamples(words));
 
     	return words;

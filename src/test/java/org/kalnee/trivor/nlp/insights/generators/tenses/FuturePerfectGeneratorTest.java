@@ -47,7 +47,7 @@ public class FuturePerfectGeneratorTest {
     @Test
     public void testFindFuturePerfect() throws IOException {
         final FuturePerfectGenerator fpg = new FuturePerfectGenerator();
-        final List<String> insight = fpg.generate(getSubtitle());
+        final List<String> insight = fpg.generate(getSubtitle().getSentences());
 
         assertTrue("should've have identified 3 sentences", 3 == insight.size());
     }

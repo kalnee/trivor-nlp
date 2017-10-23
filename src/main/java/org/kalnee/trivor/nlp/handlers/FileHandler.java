@@ -22,54 +22,26 @@
 
 package org.kalnee.trivor.nlp.handlers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URI;
 import java.util.stream.Stream;
 
 /**
- * File handler implementation of the <tt>SubtitleHandler</tt> interface. it accepts
- * both plain text files and jar files.
+ * A handler for a file source.
  *
- * @see SubtitleHandler
- * @see SubtitleHandlerFactory
+ * The <tt>SubtitleHandler</tt> interface provides a method that returns
+ * all lines of a subtitle.
+ *
+ * @see FileFileHandler
+ * @see S3FileHandler
+ * @see FileHandlerFactory
  *
  * @since 0.0.1
  */
-class FileSubtitleHandler implements SubtitleHandler {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileSubtitleHandler.class);
-
-    static final String FILE_SCHEME = "file";
-    static final String JAR_SCHEME = "jar";
+public interface FileHandler {
 
     /**
-     * File uri
-     */
-    private final URI uri;
-
-    /**
-     * Constructs a file handler for an uri
+     * Returns the lines of a subtitle file from different sources.
      *
-     * @param  uri  the file uri
+     * @return subtitle lines as a Stream
      */
-    public FileSubtitleHandler(URI uri) {
-        this.uri = uri;
-    }
-
-    @Override
-    public Stream<String> lines() {
-        try {
-            final InputStream stream = uri.toURL().openStream();
-            return new BufferedReader(new InputStreamReader(stream)).lines();
-        } catch (IOException e) {
-            LOGGER.error("file not found", e);
-            throw new IllegalStateException(e);
-        }
-    }
+    Stream<String> lines();
 }

@@ -23,7 +23,6 @@
 package org.kalnee.trivor.nlp.insights.generators.vocabulary;
 
 import org.kalnee.trivor.nlp.domain.Sentence;
-import org.kalnee.trivor.nlp.domain.Subtitle;
 import org.kalnee.trivor.nlp.domain.Token;
 import org.kalnee.trivor.nlp.domain.WordUsage;
 
@@ -44,18 +43,18 @@ abstract class WordUsageGenerator {
 
     abstract List<String> getTags();
 
-    List<WordUsage> getSentences(Subtitle subtitle) {
-        return getSentences(subtitle, Token::getLemma, null);
+    List<WordUsage> getSentences(List<Sentence> sentences) {
+        return getSentences(sentences, Token::getLemma, null);
     }
 
-    List<WordUsage> getSentences(Subtitle subtitle, Predicate<String> customFilter) {
-        return getSentences(subtitle, Token::getLemma, customFilter);
+    List<WordUsage> getSentences(List<Sentence> sentences, Predicate<String> customFilter) {
+        return getSentences(sentences, Token::getLemma, customFilter);
     }
 
-    List<WordUsage> getSentences(Subtitle subtitle, Function<Token, String> customMapper,
+    List<WordUsage> getSentences(List<Sentence> sentences, Function<Token, String> customMapper,
                                  Predicate<String> customFilter) {
         final Map<String, Set<String>> words = new HashMap<>();
-        for (Sentence sentence: subtitle.getSentences()) {
+        for (Sentence sentence: sentences) {
             Stream<String> wordsStream = sentence.getTokens().stream()
                     .filter(t -> t.getToken().matches(WORD_REGEX))
                     .filter(t -> getTags().contains(t.getTag()))
@@ -68,9 +67,9 @@ abstract class WordUsageGenerator {
             }
 
             wordsStream.forEach(word -> {
-                final Set<String> sentences = words.getOrDefault(word, new HashSet<>());
-                sentences.add(sentence.getSentence());
-                words.put(word, sentences);
+                final Set<String> wordSentences = words.getOrDefault(word, new HashSet<>());
+                wordSentences.add(sentence.getSentence());
+                words.put(word, wordSentences);
             });
         }
 

@@ -20,33 +20,38 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.kalnee.trivor.nlp.handlers;
+package org.kalnee.trivor.nlp.domain;
 
-import java.net.URI;
-import java.util.Objects;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
-public class SubtitleHandlerFactory {
+public class Transcript {
 
-	private final URI uri;
+    private List<Sentence> sentences;
+    private Map<SentimentEnum, BigDecimal> sentiment;
 
-	private SubtitleHandlerFactory(URI uri) {
-		this.uri = uri;
-	}
+    public Transcript() {
+    }
 
-	public static SubtitleHandlerFactory create(URI uri) {
-		Objects.nonNull(uri);
-		return new SubtitleHandlerFactory(uri);
-	}
+    public Transcript(List<Sentence> sentences) {
+        this.sentences = sentences;
+    }
 
-	public SubtitleHandler getHandler() {
-		switch (uri.getScheme()) {
-		case S3SubtitleHandler.S3_SCHEME:
-			return new S3SubtitleHandler(uri);
-		case FileSubtitleHandler.FILE_SCHEME:
-		case FileSubtitleHandler.JAR_SCHEME:
-			return new FileSubtitleHandler(uri);
-		default:
-			throw new IllegalStateException("no implementation found for scheme " + uri.getScheme());
-		}
-	}
+    public Transcript(List<Sentence> sentences, Map<SentimentEnum, BigDecimal> sentiment) {
+        this(sentences);
+        this.sentiment = sentiment;
+    }
+
+    public List<Sentence> getSentences() {
+        return sentences;
+    }
+
+    public void setSentences(List<Sentence> sentences) {
+        this.sentences = sentences;
+    }
+
+    public Map<SentimentEnum, BigDecimal> getSentiment() {
+        return sentiment;
+    }
 }

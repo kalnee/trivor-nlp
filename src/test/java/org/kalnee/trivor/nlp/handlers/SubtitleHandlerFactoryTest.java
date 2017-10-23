@@ -34,22 +34,22 @@ public class SubtitleHandlerFactoryTest {
 	@Test
 	public void testFileScheme() throws URISyntaxException {
 		URI file = URI.create("file://language/s1e1.srt");
-		SubtitleHandler handler = SubtitleHandlerFactory.create(file).getHandler();
+		FileHandler handler = FileHandlerFactory.create(file).getHandler();
 
-		assertEquals(FileSubtitleHandler.class, handler.getClass());
+		assertEquals(FileFileHandler.class, handler.getClass());
 	}
 
 	@Test
 	public void testS3Scheme() throws URISyntaxException {
 		URI file = URI.create("s3://bucket/s1e1.srt");
-		SubtitleHandler handler = SubtitleHandlerFactory.create(file).getHandler();
+		FileHandler handler = FileHandlerFactory.create(file).getHandler();
 
-		assertEquals(S3SubtitleHandler.class, handler.getClass());
+		assertEquals(S3FileHandler.class, handler.getClass());
 	}
 
 	@Test(expected = IllegalStateException.class)
 	public void testInvalidScheme() {
 		URI http = URI.create("http://google.com");
-		SubtitleHandlerFactory.create(http).getHandler();
+		FileHandlerFactory.create(http).getHandler();
 	}
 }

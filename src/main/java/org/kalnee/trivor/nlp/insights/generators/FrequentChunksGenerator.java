@@ -24,7 +24,7 @@ package org.kalnee.trivor.nlp.insights.generators;
 
 import org.kalnee.trivor.nlp.domain.ChunkFrequency;
 import org.kalnee.trivor.nlp.domain.SentenceFrequency;
-import org.kalnee.trivor.nlp.domain.Subtitle;
+import org.kalnee.trivor.nlp.domain.Sentence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,8 +45,8 @@ public class FrequentChunksGenerator implements Generator<List<ChunkFrequency>> 
     }
 
     @Override
-    public List<ChunkFrequency> generate(Subtitle subtitle) {
-        final Map<String, Long> chunks = subtitle.getSentences().parallelStream()
+    public List<ChunkFrequency> generate(List<Sentence> sentences) {
+        final Map<String, Long> chunks = sentences.parallelStream()
                 .flatMap(s -> s.getChunks().stream())
                 .map(chunk -> chunk.getTokens().stream().collect(joining(" ")))
                 .filter(chunk -> !chunk.contains("..."))

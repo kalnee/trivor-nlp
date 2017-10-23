@@ -25,7 +25,7 @@ package org.kalnee.trivor.nlp.insights.generators;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kalnee.trivor.nlp.domain.PhrasalVerbUsage;
-import org.kalnee.trivor.nlp.domain.Subtitle;
+import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.domain.Token;
 import org.kalnee.trivor.nlp.domain.WordUsage;
 import org.slf4j.Logger;
@@ -58,7 +58,7 @@ public class PhrasalVerbsGenerator implements Generator<List<PhrasalVerbUsage>> 
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<PhrasalVerbUsage> generate(Subtitle subtitle) {
+    public List<PhrasalVerbUsage> generate(List<Sentence> sentences) {
         try {
             final InputStream phrasalVerbsStream = getClass().getClassLoader()
                     .getResourceAsStream("language/en-phrasal-verbs.json");
@@ -75,7 +75,7 @@ public class PhrasalVerbsGenerator implements Generator<List<PhrasalVerbUsage>> 
                                 .collect(toList());
                         if (!possiblePhrasalVerbs.isEmpty()) {
                             verb.getSentences().forEach(sentence -> {
-                                String token = subtitle.getSentences().stream()
+                                String token = sentences.stream()
                                         .filter(s -> s.getSentence().equals(sentence))
                                         .distinct()
                                         .flatMap(s -> s.getTokens().stream())
@@ -85,9 +85,9 @@ public class PhrasalVerbsGenerator implements Generator<List<PhrasalVerbUsage>> 
                                 possiblePhrasalVerbs.forEach(ppv -> {
                                     final String phrasalVerb = format("%s %s", verb.getWord(), ppv);
                                     if (sentence.matches(".*\\b" + token + "\\s?[\\w]*\\s" + ppv + "\\b.*")) {
-                                        final Set<String> sentences = map.getOrDefault(phrasalVerb, new HashSet<>());
-                                        sentences.add(sentence);
-                                        map.put(phrasalVerb, sentences);
+                                        final Set<String> pvSentences = map.getOrDefault(phrasalVerb, new HashSet<>());
+                                        pvSentences.add(sentence);
+                                        map.put(phrasalVerb, pvSentences);
                                     }
                                 });
                             });

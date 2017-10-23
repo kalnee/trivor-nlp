@@ -23,15 +23,14 @@
 package org.kalnee.trivor.nlp.insights.processors;
 
 import org.apache.commons.lang3.time.StopWatch;
-import org.kalnee.trivor.nlp.domain.Result;
-import org.kalnee.trivor.nlp.domain.Subtitle;
-import org.kalnee.trivor.nlp.domain.VerbTenses;
-import org.kalnee.trivor.nlp.domain.Vocabulary;
+import org.kalnee.trivor.nlp.domain.*;
 import org.kalnee.trivor.nlp.insights.generators.*;
 import org.kalnee.trivor.nlp.insights.generators.tenses.*;
 import org.kalnee.trivor.nlp.insights.generators.vocabulary.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 class InsightsProcessor {
 
@@ -40,49 +39,67 @@ class InsightsProcessor {
     InsightsProcessor() {
     }
 
-    Result process(Subtitle subtitle) {
+    Result process(Transcript transcript) {
         final StopWatch sw = new StopWatch();
         sw.start();
-        LOGGER.info("Running Insight Generators");
+        LOGGER.info("Running Transcript Generators");
 
-        final Result result = new Result();
-
-        result.setNumberOfSentences(new NumberOfSentencesGenerator().generate(subtitle));
-        result.setSentimentAnalysis(new SentimentGenerator().generate(subtitle));
-        result.setRateOfSpeech(new RateOfSpeechGenerator().generate(subtitle));
-        result.setFrequentSentences(new FrequentSentencesGenerator().generate(subtitle));
-        result.setFrequentChunks(new FrequentChunksGenerator().generate(subtitle));
-        result.setFrequencyRate(new FrequencyRateGenerator().generate(subtitle));
-
-        final Vocabulary vocabulary = new Vocabulary();
-        vocabulary.setAdjectives(new AdjectivesGenerator().generate(subtitle));
-        vocabulary.setAdverbs(new AdverbsGenerator().generate(subtitle));
-        vocabulary.setComparatives(new ComparativesGenerator().generate(subtitle));
-        vocabulary.setModals(new ModalsGenerator().generate(subtitle));
-        vocabulary.setNouns(new NounsGenerator().generate(subtitle));
-        vocabulary.setPrepositions(new PrepositionGenerator().generate(subtitle));
-        vocabulary.setSuperlatives(new SuperlativesGenerator().generate(subtitle));
-        vocabulary.setVerbs(new VerbsGenerator().generate(subtitle));
-        vocabulary.setWhWords(new WhWordsGenerator().generate(subtitle));
-        result.setVocabulary(vocabulary);
-        result.setPhrasalVerbs(new PhrasalVerbsGenerator(vocabulary.getVerbs()).generate(subtitle));
-
-        final VerbTenses verbTenses = new VerbTenses();
-        verbTenses.setSimplePresent(new SimplePresentGenerator().generate(subtitle));
-        verbTenses.setSimplePast(new SimplePastGenerator().generate(subtitle));
-        verbTenses.setSimpleFuture(new SimpleFutureGenerator().generate(subtitle));
-        verbTenses.setPresentProgressive(new PresentProgressiveGenerator().generate(subtitle));
-        verbTenses.setPastProgressive(new PastProgressiveGenerator().generate(subtitle));
-        verbTenses.setFutureProgressive(new FutureProgressiveGenerator().generate(subtitle));
-        verbTenses.setPresentPerfect(new PresentPerfectGenerator().generate(subtitle));
-        verbTenses.setPastPerfect(new PastPerfectGenerator().generate(subtitle));
-        verbTenses.setFuturePerfect(new FuturePerfectGenerator().generate(subtitle));
-        verbTenses.setNonSentences(new NonSentencesGenerator().generate(subtitle));
-        verbTenses.setMixedTenses(new MixedTensesGenerator(verbTenses).generate(subtitle));
-        result.setVerbTenses(verbTenses);
+        final Result result = process(transcript.getSentences());
+        result.setSentimentAnalysis(new SentimentGenerator(transcript.getSentiment()).generate(transcript.getSentences()));
 
         sw.stop();
         LOGGER.info("Insights generated in {}ms", new Object[]{sw.getTime()});
+        return result;
+    }
+
+    Result process(Subtitle subtitle) {
+        final StopWatch sw = new StopWatch();
+        sw.start();
+        LOGGER.info("Running Transcript Generators");
+
+        final Result result = process(subtitle.getSentences());
+        result.setSentimentAnalysis(new SentimentGenerator(subtitle.getSentiment()).generate(subtitle.getSentences()));
+        result.setRateOfSpeech(new RateOfSpeechGenerator(subtitle.getDuration()).generate(subtitle.getSentences()));
+
+        sw.stop();
+        LOGGER.info("Insights generated in {}ms", new Object[]{sw.getTime()});
+        return result;
+    }
+
+    private Result process(List<Sentence> sentences) {
+        final Result result = new Result();
+
+        result.setNumberOfSentences(new NumberOfSentencesGenerator().generate(sentences));
+        result.setFrequentSentences(new FrequentSentencesGenerator().generate(sentences));
+        result.setFrequentChunks(new FrequentChunksGenerator().generate(sentences));
+        result.setFrequencyRate(new FrequencyRateGenerator().generate(sentences));
+
+        final Vocabulary vocabulary = new Vocabulary();
+        vocabulary.setAdjectives(new AdjectivesGenerator().generate(sentences));
+        vocabulary.setAdverbs(new AdverbsGenerator().generate(sentences));
+        vocabulary.setComparatives(new ComparativesGenerator().generate(sentences));
+        vocabulary.setModals(new ModalsGenerator().generate(sentences));
+        vocabulary.setNouns(new NounsGenerator().generate(sentences));
+        vocabulary.setPrepositions(new PrepositionGenerator().generate(sentences));
+        vocabulary.setSuperlatives(new SuperlativesGenerator().generate(sentences));
+        vocabulary.setVerbs(new VerbsGenerator().generate(sentences));
+        vocabulary.setWhWords(new WhWordsGenerator().generate(sentences));
+        result.setVocabulary(vocabulary);
+        result.setPhrasalVerbs(new PhrasalVerbsGenerator(vocabulary.getVerbs()).generate(sentences));
+
+        final VerbTenses verbTenses = new VerbTenses();
+        verbTenses.setSimplePresent(new SimplePresentGenerator().generate(sentences));
+        verbTenses.setSimplePast(new SimplePastGenerator().generate(sentences));
+        verbTenses.setSimpleFuture(new SimpleFutureGenerator().generate(sentences));
+        verbTenses.setPresentProgressive(new PresentProgressiveGenerator().generate(sentences));
+        verbTenses.setPastProgressive(new PastProgressiveGenerator().generate(sentences));
+        verbTenses.setFutureProgressive(new FutureProgressiveGenerator().generate(sentences));
+        verbTenses.setPresentPerfect(new PresentPerfectGenerator().generate(sentences));
+        verbTenses.setPastPerfect(new PastPerfectGenerator().generate(sentences));
+        verbTenses.setFuturePerfect(new FuturePerfectGenerator().generate(sentences));
+        verbTenses.setNonSentences(new NonSentencesGenerator().generate(sentences));
+        verbTenses.setMixedTenses(new MixedTensesGenerator(verbTenses).generate(sentences));
+        result.setVerbTenses(verbTenses);
 
         return result;
     }

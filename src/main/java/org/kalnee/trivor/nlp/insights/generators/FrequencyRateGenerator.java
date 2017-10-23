@@ -25,7 +25,7 @@ package org.kalnee.trivor.nlp.insights.generators;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kalnee.trivor.nlp.domain.FrequencyRate;
-import org.kalnee.trivor.nlp.domain.Subtitle;
+import org.kalnee.trivor.nlp.domain.Sentence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,12 +55,7 @@ public class FrequencyRateGenerator implements Generator<List<FrequencyRate>> {
     }
 
     @Override
-    public boolean shouldRun(Subtitle subtitle) {
-        return subtitle.getDuration() != null;
-    }
-
-    @Override
-    public List<FrequencyRate> generate(Subtitle subtitle) {
+    public List<FrequencyRate> generate(List<Sentence> sentences) {
         try {
             final InputStream highFrequencyWordsStream = getClass().getClassLoader()
                     .getResourceAsStream("language/en-high-frequency.json");
@@ -72,7 +67,7 @@ public class FrequencyRateGenerator implements Generator<List<FrequencyRate>> {
             final FrequencyRate middle = new FrequencyRate(MIDDLE);
             final FrequencyRate high = new FrequencyRate(HIGH);
 
-            subtitle.getSentences().stream().flatMap(s -> s.getTokens().stream())
+            sentences.stream().flatMap(s -> s.getTokens().stream())
                     .filter(t -> !asList(NNP.name(), NNPS.name(), CD.name(), SYM.name()).contains(t.getTag()))
                     .filter(t -> t.getProb() > 0.6)
                     .map(t -> t.getLemma().toLowerCase())

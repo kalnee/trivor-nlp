@@ -23,32 +23,38 @@
 package org.kalnee.trivor.nlp.insights.generators;
 
 
+import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.domain.SentimentEnum;
-import org.kalnee.trivor.nlp.domain.Subtitle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
+import static java.util.Collections.emptyMap;
 import static org.kalnee.trivor.nlp.domain.InsightsEnum.SENTIMENT_ANALYSIS;
 
 public class SentimentGenerator implements Generator<Map<SentimentEnum, BigDecimal>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SentimentGenerator.class);
 
+	private final Map<SentimentEnum, BigDecimal> sentiment;
+
+	public SentimentGenerator(Map<SentimentEnum, BigDecimal> sentiment) {
+		this.sentiment = sentiment;
+	}
+
 	@Override
 	public String getCode() {
 		return SENTIMENT_ANALYSIS.getCode();
 	}
 
-	@Override
-	public boolean shouldRun(Subtitle subtitle) {
-		return subtitle.getSentiment() != null;
-	}
-
-	public Map<SentimentEnum, BigDecimal> generate(Subtitle subtitle) {
-		LOGGER.info("{}: {}", getCode(), subtitle.getSentiment());
-		return subtitle.getSentiment();
+	public Map<SentimentEnum, BigDecimal> generate(List<Sentence> sentences) {
+		if (sentiment == null) {
+			return emptyMap();
+		}
+		LOGGER.info("{}: {}", getCode(), sentiment);
+		return sentiment;
 	}
 }
