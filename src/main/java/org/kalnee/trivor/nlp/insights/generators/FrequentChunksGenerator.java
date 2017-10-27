@@ -23,19 +23,19 @@
 package org.kalnee.trivor.nlp.insights.generators;
 
 import org.kalnee.trivor.nlp.domain.ChunkFrequency;
-import org.kalnee.trivor.nlp.domain.SentenceFrequency;
 import org.kalnee.trivor.nlp.domain.Sentence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.*;
 import static org.kalnee.trivor.nlp.domain.InsightsEnum.FREQUENT_CHUNKS;
 
-public class FrequentChunksGenerator implements Generator<List<ChunkFrequency>> {
+public class FrequentChunksGenerator implements Generator<Set<ChunkFrequency>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FrequentChunksGenerator.class);
 
@@ -45,18 +45,19 @@ public class FrequentChunksGenerator implements Generator<List<ChunkFrequency>> 
     }
 
     @Override
-    public List<ChunkFrequency> generate(List<Sentence> sentences) {
+    public Set<ChunkFrequency> generate(List<Sentence> sentences) {
         final Map<String, Long> chunks = sentences.parallelStream()
                 .flatMap(s -> s.getChunks().stream())
                 .map(chunk -> chunk.getTokens().stream().collect(joining(" ")))
+                .map(String::toLowerCase)
                 .filter(chunk -> !chunk.contains("..."))
                 .collect(groupingBy(Function.identity(), counting()));
 
-        final List<ChunkFrequency> sortedChunks = chunks.entrySet().parallelStream()
+        final Set<ChunkFrequency> sortedChunks = chunks.entrySet().parallelStream()
                 .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
                 .filter(e -> e.getValue() > 1)
                 .map(e -> new ChunkFrequency(e.getKey(), e.getValue()))
-                .collect(toList());
+                .collect(toSet());
 
         LOGGER.info("{} - {}", getCode(), sortedChunks.stream().limit(2).collect(toList()));
         return sortedChunks;

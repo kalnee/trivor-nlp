@@ -23,7 +23,6 @@
 package org.kalnee.trivor.nlp.insights.generators.tenses;
 
 import org.kalnee.trivor.nlp.domain.Sentence;
-import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.insights.generators.Generator;
 import org.kalnee.trivor.nlp.utils.CollectionUtils;
 import org.slf4j.Logger;
@@ -32,9 +31,10 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static java.lang.String.format;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.kalnee.trivor.nlp.domain.InsightsEnum.FUTURE_PROGRESSIVE;
 import static org.kalnee.trivor.nlp.domain.TagsEnum.*;
 
@@ -45,7 +45,7 @@ import static org.kalnee.trivor.nlp.domain.TagsEnum.*;
  *
  * @since 0.0.1
  */
-public class FutureProgressiveGenerator implements Generator<List<String>> {
+public class FutureProgressiveGenerator implements Generator<Set<String>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FutureProgressiveGenerator.class);
 
@@ -62,8 +62,8 @@ public class FutureProgressiveGenerator implements Generator<List<String>> {
 		return FUTURE_PROGRESSIVE.getCode();
 	}
 
-	public List<String> generate(List<Sentence> sentences) {
-		final List<String> matchedSentences = sentences
+	public Set<String> generate(List<Sentence> sentences) {
+		final Set<String> matchedSentences = sentences
 			.stream()
 			.filter(s -> CollectionUtils.allMatch(s.getSentence(), MUST_CONTAIN_BE)
 				&& CollectionUtils.allMatch(s.getSentenceTags(), MUST_CONTAIN_VERB)
@@ -71,7 +71,7 @@ public class FutureProgressiveGenerator implements Generator<List<String>> {
 				&& CollectionUtils.anyMatch(s.getSentence(), MUST_CONTAIN_WORDS)
 				&& CollectionUtils.noneMatch(s.getSentenceTags(), MUST_NOT_CONTAIN))
 			.map(Sentence::getSentence)
-			.collect(toList());
+			.collect(toSet());
 
 
 		LOGGER.info(

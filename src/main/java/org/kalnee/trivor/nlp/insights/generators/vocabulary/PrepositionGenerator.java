@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Sentence generator for prepositions.
@@ -41,7 +42,7 @@ import java.util.List;
  *
  * @since 0.0.1
  */
-public class PrepositionGenerator extends WordUsageGenerator implements Generator<List<WordUsage>> {
+public class PrepositionGenerator extends WordUsageGenerator implements Generator<Set<WordUsage>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PrepositionGenerator.class);
 
@@ -56,8 +57,8 @@ public class PrepositionGenerator extends WordUsageGenerator implements Generato
 	}
 
 	@Override
-	public List<WordUsage> generate(List<Sentence> sentences) {
-		final List<WordUsage> words = getSentences(sentences);
+	public Set<WordUsage> generate(List<Sentence> sentences) {
+		final Set<WordUsage> words = getSentences(sentences);
 		LOGGER.info("{} - {}", getCode(), getExamples(words));
 
     	return words;

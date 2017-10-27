@@ -33,6 +33,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.kalnee.trivor.nlp.domain.TagsEnum.NNP;
+import static org.kalnee.trivor.nlp.domain.TagsEnum.NNPS;
+
 public class Chunker {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Chunker.class);
@@ -68,9 +71,13 @@ public class Chunker {
             }
 
             if (valid && span.getEnd() - span.getStart() > 1) {
+                final List<String> tagsSubList = tags.subList(span.getStart(), span.getEnd());
+                if (tagsSubList.contains(NNP.name()) || tagsSubList.contains(NNPS.name())) {
+                    continue;
+                }
                 chunks.add(new Chunk(
                         tokens.subList(span.getStart(), span.getEnd()),
-                        tags.subList(span.getStart(), span.getEnd()))
+                        tagsSubList)
                 );
             }
         }

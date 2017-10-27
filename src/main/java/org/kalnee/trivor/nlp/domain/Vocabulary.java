@@ -22,89 +22,90 @@
 
 package org.kalnee.trivor.nlp.domain;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Vocabulary {
 
-    private List<WordUsage> adjectives;
-    private List<WordUsage> adverbs;
-    private List<WordUsage> comparatives;
-    private List<WordUsage> modals;
-    private List<WordUsage> nouns;
-    private List<WordUsage> prepositions;
-    private List<WordUsage> superlatives;
-    private List<WordUsage> verbs;
-    private List<WordUsage> whWords;
+    private Set<WordUsage> adjectives = new HashSet<>();
+    private Set<WordUsage> adverbs = new HashSet<>();
+    private Set<WordUsage> comparatives = new HashSet<>();
+    private Set<WordUsage> modals = new HashSet<>();
+    private Set<WordUsage> nouns = new HashSet<>();
+    private Set<WordUsage> prepositions = new HashSet<>();
+    private Set<WordUsage> superlatives = new HashSet<>();
+    private Set<WordUsage> verbs = new HashSet<>();
+    private Set<WordUsage> whWords = new HashSet<>();
 
-    public List<WordUsage> getAdjectives() {
+    public Set<WordUsage> getAdjectives() {
         return adjectives;
     }
 
-    public void setAdjectives(List<WordUsage> adjectives) {
+    public void setAdjectives(Set<WordUsage> adjectives) {
         this.adjectives = adjectives;
     }
 
-    public List<WordUsage> getAdverbs() {
+    public Set<WordUsage> getAdverbs() {
         return adverbs;
     }
 
-    public void setAdverbs(List<WordUsage> adverbs) {
+    public void setAdverbs(Set<WordUsage> adverbs) {
         this.adverbs = adverbs;
     }
 
-    public List<WordUsage> getComparatives() {
+    public Set<WordUsage> getComparatives() {
         return comparatives;
     }
 
-    public void setComparatives(List<WordUsage> comparatives) {
+    public void setComparatives(Set<WordUsage> comparatives) {
         this.comparatives = comparatives;
     }
 
-    public List<WordUsage> getModals() {
+    public Set<WordUsage> getModals() {
         return modals;
     }
 
-    public void setModals(List<WordUsage> modals) {
+    public void setModals(Set<WordUsage> modals) {
         this.modals = modals;
     }
 
-    public List<WordUsage> getNouns() {
+    public Set<WordUsage> getNouns() {
         return nouns;
     }
 
-    public void setNouns(List<WordUsage> nouns) {
+    public void setNouns(Set<WordUsage> nouns) {
         this.nouns = nouns;
     }
 
-    public List<WordUsage> getPrepositions() {
+    public Set<WordUsage> getPrepositions() {
         return prepositions;
     }
 
-    public void setPrepositions(List<WordUsage> prepositions) {
+    public void setPrepositions(Set<WordUsage> prepositions) {
         this.prepositions = prepositions;
     }
 
-    public List<WordUsage> getSuperlatives() {
+    public Set<WordUsage> getSuperlatives() {
         return superlatives;
     }
 
-    public void setSuperlatives(List<WordUsage> superlatives) {
+    public void setSuperlatives(Set<WordUsage> superlatives) {
         this.superlatives = superlatives;
     }
 
-    public List<WordUsage> getVerbs() {
+    public Set<WordUsage> getVerbs() {
         return verbs;
     }
 
-    public void setVerbs(List<WordUsage> verbs) {
+    public void setVerbs(Set<WordUsage> verbs) {
         this.verbs = verbs;
     }
 
-    public List<WordUsage> getWhWords() {
+    public Set<WordUsage> getWhWords() {
         return whWords;
     }
 
-    public void setWhWords(List<WordUsage> whWords) {
+    public void setWhWords(Set<WordUsage> whWords) {
         this.whWords = whWords;
     }
 }

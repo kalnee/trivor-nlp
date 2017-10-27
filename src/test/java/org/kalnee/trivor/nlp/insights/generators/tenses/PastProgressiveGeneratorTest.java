@@ -30,6 +30,7 @@ import org.kalnee.trivor.nlp.utils.TestUtils;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
@@ -47,7 +48,7 @@ public class PastProgressiveGeneratorTest {
   @Test
   public void testFindPastProgressive() throws IOException {
     final PastProgressiveGenerator ppg = new PastProgressiveGenerator();
-    final List<String> insight = ppg.generate(getSubtitle().getSentences());
+    final Set<String> insight = ppg.generate(getSubtitle().getSentences());
 
     assertTrue("should've have identified 3 sentences", 3 == insight.size());
   }

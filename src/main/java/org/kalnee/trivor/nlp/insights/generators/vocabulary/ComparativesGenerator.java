@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static org.kalnee.trivor.nlp.domain.InsightsEnum.COMPARATIVES_USAGE;
 import static org.kalnee.trivor.nlp.domain.TagsEnum.JJR;
@@ -44,7 +45,7 @@ import static org.kalnee.trivor.nlp.utils.LanguageUtils.NOT_ADJECTIVES;
  * @since 0.0.1
  */
 public class ComparativesGenerator extends WordUsageGenerator
-		implements Generator<List<WordUsage>> {
+		implements Generator<Set<WordUsage>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComparativesGenerator.class);
 
@@ -59,8 +60,8 @@ public class ComparativesGenerator extends WordUsageGenerator
 	}
 
 	@Override
-	public List<WordUsage> generate(List<Sentence> sentences) {
-		final List<WordUsage> words = getSentences(
+	public Set<WordUsage> generate(List<Sentence> sentences) {
+		final Set<WordUsage> words = getSentences(
 				sentences, t -> t.getToken().toLowerCase(), w -> !NOT_ADJECTIVES.contains(w)
 		);
 		LOGGER.info("{} - {}", getCode(), getExamples(words));

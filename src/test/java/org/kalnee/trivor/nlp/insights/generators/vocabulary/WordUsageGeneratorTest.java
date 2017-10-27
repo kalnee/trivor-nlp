@@ -28,7 +28,7 @@ import org.kalnee.trivor.nlp.domain.WordUsage;
 import org.kalnee.trivor.nlp.insights.processors.SubtitleProcessor;
 
 import java.net.URISyntaxException;
-import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
@@ -90,7 +90,7 @@ public class WordUsageGeneratorTest {
     }
 
     @SuppressWarnings("unchecked")
-    private Integer getFrequency(List<WordUsage> words, String word) {
+    private Integer getFrequency(Set<WordUsage> words, String word) {
         return words.stream()
                 .filter(w -> w.getWord().equals(word))
                 .mapToInt(w -> w.getSentences().size())

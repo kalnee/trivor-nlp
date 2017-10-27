@@ -23,7 +23,6 @@
 package org.kalnee.trivor.nlp.insights.generators.tenses;
 
 import org.kalnee.trivor.nlp.domain.Sentence;
-import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.insights.generators.Generator;
 import org.kalnee.trivor.nlp.utils.CollectionUtils;
 import org.slf4j.Logger;
@@ -31,9 +30,10 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static java.lang.String.format;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.kalnee.trivor.nlp.domain.InsightsEnum.PAST_PROGRESSIVE;
 import static org.kalnee.trivor.nlp.domain.TagsEnum.*;
 
@@ -44,7 +44,7 @@ import static org.kalnee.trivor.nlp.domain.TagsEnum.*;
  *
  * @since 0.0.1
  */
-public class PastProgressiveGenerator implements Generator<List<String>> {
+public class PastProgressiveGenerator implements Generator<Set<String>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PastProgressiveGenerator.class);
 
@@ -57,12 +57,12 @@ public class PastProgressiveGenerator implements Generator<List<String>> {
     }
 
     @Override
-    public List<String> generate(List<Sentence> sentences) {
-        final List<String> matchedSentences = sentences.stream()
+    public Set<String> generate(List<Sentence> sentences) {
+        final Set<String> matchedSentences = sentences.stream()
                 .filter(s -> CollectionUtils.allMatch(s.getSentenceTags(), MUST_CONTAIN)
                         && CollectionUtils.noneMatch(s.getSentence().toLowerCase(), MUST_NOT_CONTAIN_WORDS))
                 .map(Sentence::getSentence)
-                .collect(toList());
+                .collect(toSet());
 
         LOGGER.info(
                 format("%s: %d/%d (%.2f%%)", getCode(), matchedSentences.size(), sentences.size(),

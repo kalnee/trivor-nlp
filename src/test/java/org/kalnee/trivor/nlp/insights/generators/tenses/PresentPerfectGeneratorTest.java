@@ -30,6 +30,7 @@ import org.kalnee.trivor.nlp.utils.TestUtils;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
@@ -48,7 +49,7 @@ public class PresentPerfectGeneratorTest {
   @Test
   public void testFindPresentPerfect() throws IOException {
     final PresentPerfectGenerator spg = new PresentPerfectGenerator();
-    final List<String> insight = spg.generate(getSubtitle().getSentences());
+    final Set<String> insight = spg.generate(getSubtitle().getSentences());
 
     assertTrue("should've have identified 3 sentences", 3 == insight.size());
   }

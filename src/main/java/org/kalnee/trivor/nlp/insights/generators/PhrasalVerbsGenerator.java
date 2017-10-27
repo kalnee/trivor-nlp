@@ -36,18 +36,19 @@ import java.io.InputStream;
 import java.util.*;
 
 import static java.lang.String.format;
-import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
 import static java.util.Collections.reverseOrder;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
-public class PhrasalVerbsGenerator implements Generator<List<PhrasalVerbUsage>> {
+public class PhrasalVerbsGenerator implements Generator<Set<PhrasalVerbUsage>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PhrasalVerbsGenerator.class);
 
-    private final List<WordUsage> verbs;
+    private final Set<WordUsage> verbs;
 
-    public PhrasalVerbsGenerator(List<WordUsage> verbs) {
+    public PhrasalVerbsGenerator(Set<WordUsage> verbs) {
         this.verbs = verbs;
     }
 
@@ -58,7 +59,7 @@ public class PhrasalVerbsGenerator implements Generator<List<PhrasalVerbUsage>> 
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<PhrasalVerbUsage> generate(List<Sentence> sentences) {
+    public Set<PhrasalVerbUsage> generate(List<Sentence> sentences) {
         try {
             final InputStream phrasalVerbsStream = getClass().getClassLoader()
                     .getResourceAsStream("language/en-phrasal-verbs.json");
@@ -75,7 +76,7 @@ public class PhrasalVerbsGenerator implements Generator<List<PhrasalVerbUsage>> 
                                 .collect(toList());
                         if (!possiblePhrasalVerbs.isEmpty()) {
                             verb.getSentences().forEach(sentence -> {
-                                String token = sentences.stream()
+                                final String token = sentences.stream()
                                         .filter(s -> s.getSentence().equals(sentence))
                                         .distinct()
                                         .flatMap(s -> s.getTokens().stream())
@@ -94,15 +95,15 @@ public class PhrasalVerbsGenerator implements Generator<List<PhrasalVerbUsage>> 
                         }
                     });
 
-            final List<PhrasalVerbUsage> usage = map.entrySet().stream()
+            final Set<PhrasalVerbUsage> usage = map.entrySet().stream()
                     .sorted(reverseOrder(comparingInt(e -> e.getValue().size())))
                     .map(e -> new PhrasalVerbUsage(e.getKey(), e.getValue()))
-                    .collect(toList());
+                    .collect(toSet());
             LOGGER.info("{}: {}", getCode(), usage.stream().limit(2).collect(toList()));
             return usage;
         } catch (IOException e) {
            LOGGER.error("an error occurred while reading the high frequency json file", e);
-           return emptyList();
+           return emptySet();
         }
     }
 }

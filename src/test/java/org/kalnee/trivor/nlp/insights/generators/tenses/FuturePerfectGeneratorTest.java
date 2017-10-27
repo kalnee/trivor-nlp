@@ -30,6 +30,7 @@ import org.kalnee.trivor.nlp.utils.TestUtils;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
@@ -47,7 +48,7 @@ public class FuturePerfectGeneratorTest {
     @Test
     public void testFindFuturePerfect() throws IOException {
         final FuturePerfectGenerator fpg = new FuturePerfectGenerator();
-        final List<String> insight = fpg.generate(getSubtitle().getSentences());
+        final Set<String> insight = fpg.generate(getSubtitle().getSentences());
 
         assertTrue("should've have identified 3 sentences", 3 == insight.size());
     }

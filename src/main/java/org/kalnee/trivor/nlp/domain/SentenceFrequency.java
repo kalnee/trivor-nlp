@@ -59,5 +59,20 @@ public class SentenceFrequency {
                 ", frequency=" + frequency +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SentenceFrequency that = (SentenceFrequency) o;
+
+        return sentence != null ? sentence.equals(that.sentence) : that.sentence == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return sentence != null ? sentence.hashCode() : 0;
+    }
 }
 

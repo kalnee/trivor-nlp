@@ -25,16 +25,17 @@ package org.kalnee.trivor.nlp.domain;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Result {
 
     private Integer numberOfSentences;
     private Map<SentimentEnum, BigDecimal> sentimentAnalysis;
     private RateOfSpeech rateOfSpeech;
-    private List<SentenceFrequency> frequentSentences;
-    private List<ChunkFrequency> frequentChunks;
+    private Set<SentenceFrequency> frequentSentences;
+    private Set<ChunkFrequency> frequentChunks;
     private List<FrequencyRate> frequencyRate;
-    private List<PhrasalVerbUsage> phrasalVerbs;
+    private Set<PhrasalVerbUsage> phrasalVerbs;
 
     private Vocabulary vocabulary;
     private VerbTenses verbTenses;
@@ -63,19 +64,19 @@ public class Result {
         this.rateOfSpeech = rateOfSpeech;
     }
 
-    public List<SentenceFrequency> getFrequentSentences() {
+    public Set<SentenceFrequency> getFrequentSentences() {
         return frequentSentences;
     }
 
-    public void setFrequentSentences(List<SentenceFrequency> frequentSentences) {
+    public void setFrequentSentences(Set<SentenceFrequency> frequentSentences) {
         this.frequentSentences = frequentSentences;
     }
 
-    public List<ChunkFrequency> getFrequentChunks() {
+    public Set<ChunkFrequency> getFrequentChunks() {
         return frequentChunks;
     }
 
-    public void setFrequentChunks(List<ChunkFrequency> frequentChunks) {
+    public void setFrequentChunks(Set<ChunkFrequency> frequentChunks) {
         this.frequentChunks = frequentChunks;
     }
 
@@ -87,11 +88,11 @@ public class Result {
         this.frequencyRate = frequencyRate;
     }
 
-    public List<PhrasalVerbUsage> getPhrasalVerbs() {
+    public Set<PhrasalVerbUsage> getPhrasalVerbs() {
         return phrasalVerbs;
     }
 
-    public void setPhrasalVerbs(List<PhrasalVerbUsage> phrasalVerbs) {
+    public void setPhrasalVerbs(Set<PhrasalVerbUsage> phrasalVerbs) {
         this.phrasalVerbs = phrasalVerbs;
     }
 

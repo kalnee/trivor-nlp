@@ -23,7 +23,6 @@
 package org.kalnee.trivor.nlp.insights.generators.tenses;
 
 import org.kalnee.trivor.nlp.domain.Sentence;
-import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.domain.VerbTenses;
 import org.kalnee.trivor.nlp.insights.generators.Generator;
 import org.slf4j.Logger;
@@ -31,10 +30,12 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.kalnee.trivor.nlp.domain.InsightsEnum.MIXED_TENSE;
 
 /**
@@ -43,7 +44,7 @@ import static org.kalnee.trivor.nlp.domain.InsightsEnum.MIXED_TENSE;
  * @see Generator
  * @since 0.0.1
  */
-public class MixedTensesGenerator implements Generator<List<String>> {
+public class MixedTensesGenerator implements Generator<Set<String>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MixedTensesGenerator.class);
 
@@ -59,7 +60,7 @@ public class MixedTensesGenerator implements Generator<List<String>> {
     }
 
     @SuppressWarnings("unchecked")
-    public List<String> generate(List<Sentence> sentences) {
+    public Set<String> generate(List<Sentence> sentences) {
 
         final List<String> allSentences = Stream.of(
                 verbTenses.getSimplePresent(),
@@ -74,10 +75,10 @@ public class MixedTensesGenerator implements Generator<List<String>> {
                 verbTenses.getNonSentences()
         ).flatMap(Collection::stream).collect(toList());
 
-        final List<String> mixed = sentences.stream()
+        final Set<String> mixed = sentences.stream()
                 .map(Sentence::getSentence)
                 .filter(sentence -> !allSentences.contains(sentence))
-                .collect(toList());
+                .collect(toSet());
 
         LOGGER.info(
                 format("%s: %d/%d (%.2f%%)", getCode(), mixed.size(), sentences.size(),

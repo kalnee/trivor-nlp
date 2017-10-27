@@ -34,7 +34,7 @@ import java.util.stream.Stream;
 import static java.lang.Character.isUpperCase;
 import static java.util.Collections.reverseOrder;
 import static java.util.Comparator.comparingInt;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 abstract class WordUsageGenerator {
 
@@ -43,15 +43,15 @@ abstract class WordUsageGenerator {
 
     abstract List<String> getTags();
 
-    List<WordUsage> getSentences(List<Sentence> sentences) {
+    Set<WordUsage> getSentences(List<Sentence> sentences) {
         return getSentences(sentences, Token::getLemma, null);
     }
 
-    List<WordUsage> getSentences(List<Sentence> sentences, Predicate<String> customFilter) {
+    Set<WordUsage> getSentences(List<Sentence> sentences, Predicate<String> customFilter) {
         return getSentences(sentences, Token::getLemma, customFilter);
     }
 
-    List<WordUsage> getSentences(List<Sentence> sentences, Function<Token, String> customMapper,
+    Set<WordUsage> getSentences(List<Sentence> sentences, Function<Token, String> customMapper,
                                  Predicate<String> customFilter) {
         final Map<String, Set<String>> words = new HashMap<>();
         for (Sentence sentence: sentences) {
@@ -75,10 +75,10 @@ abstract class WordUsageGenerator {
 
         return words.entrySet().stream()
                 .sorted(reverseOrder(comparingInt(e -> e.getValue().size())))
-                .map(e -> new WordUsage(e.getKey(), e.getValue())).collect(toList());
+                .map(e -> new WordUsage(e.getKey(), e.getValue())).collect(toSet());
     }
 
-    List<WordUsage> getExamples(List<WordUsage> sentences) {
-        return sentences.stream().limit(2).collect(toList());
+    Set<WordUsage> getExamples(Set<WordUsage> sentences) {
+        return sentences.stream().limit(2).collect(toSet());
     }
 }

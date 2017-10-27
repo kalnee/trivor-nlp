@@ -64,5 +64,20 @@ public class PhrasalVerbUsage {
                 ", sentences=" + sentences.stream().limit(2).collect(toSet()) +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PhrasalVerbUsage that = (PhrasalVerbUsage) o;
+
+        return phrasalVerb != null ? phrasalVerb.equals(that.phrasalVerb) : that.phrasalVerb == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return phrasalVerb != null ? phrasalVerb.hashCode() : 0;
+    }
 }
 

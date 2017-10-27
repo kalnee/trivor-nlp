@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static org.kalnee.trivor.nlp.domain.InsightsEnum.ADJECTIVES_USAGE;
 import static org.kalnee.trivor.nlp.domain.TagsEnum.JJ;
@@ -43,7 +44,7 @@ import static org.kalnee.trivor.nlp.utils.LanguageUtils.NOT_ADJECTIVES;
  *
  * @since 0.0.1
  */
-public class AdjectivesGenerator extends WordUsageGenerator implements Generator<List<WordUsage>> {
+public class AdjectivesGenerator extends WordUsageGenerator implements Generator<Set<WordUsage>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdjectivesGenerator.class);
 
@@ -58,8 +59,8 @@ public class AdjectivesGenerator extends WordUsageGenerator implements Generator
 	}
 
 	@Override
-	public List<WordUsage> generate(List<Sentence> sentences) {
-		final List<WordUsage> wordUsages = getSentences(sentences, w -> !NOT_ADJECTIVES.contains(w));
+	public Set<WordUsage> generate(List<Sentence> sentences) {
+		final Set<WordUsage> wordUsages = getSentences(sentences, w -> !NOT_ADJECTIVES.contains(w));
 		LOGGER.info("{} - {}", getCode(), getExamples(wordUsages));
 
     	return wordUsages;

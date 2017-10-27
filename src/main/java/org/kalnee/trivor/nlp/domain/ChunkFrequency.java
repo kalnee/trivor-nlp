@@ -59,5 +59,20 @@ public class ChunkFrequency {
                 ", frequency=" + frequency +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ChunkFrequency that = (ChunkFrequency) o;
+
+        return chunk != null ? chunk.equals(that.chunk) : that.chunk == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return chunk != null ? chunk.hashCode() : 0;
+    }
 }
 

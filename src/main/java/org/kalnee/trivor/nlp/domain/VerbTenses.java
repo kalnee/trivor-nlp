@@ -22,109 +22,109 @@
 
 package org.kalnee.trivor.nlp.domain;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class VerbTenses {
 
-    private List<String> simplePresent;
-    private List<String> simplePast;
-    private List<String> simpleFuture;
-    private List<String> presentProgressive;
-    private List<String> pastProgressive;
-    private List<String> futureProgressive;
-    private List<String> presentPerfect;
-    private List<String> pastPerfect;
-    private List<String> futurePerfect;
+    private Set<String> simplePresent = new HashSet<>();
+    private Set<String> simplePast = new HashSet<>();
+    private Set<String> simpleFuture = new HashSet<>();
+    private Set<String> presentProgressive = new HashSet<>();
+    private Set<String> pastProgressive = new HashSet<>();
+    private Set<String> futureProgressive = new HashSet<>();
+    private Set<String> presentPerfect = new HashSet<>();
+    private Set<String> pastPerfect = new HashSet<>();
+    private Set<String> futurePerfect = new HashSet<>();
 
-    private List<String> mixedTenses;
+    private Set<String> mixedTenses = new HashSet<>();
+    private Set<String> nonSentences = new HashSet<>();
 
-    private List<String> nonSentences;
-
-    public List<String> getSimplePresent() {
+    public Set<String> getSimplePresent() {
         return simplePresent;
     }
 
-    public void setSimplePresent(List<String> simplePresent) {
+    public void setSimplePresent(Set<String> simplePresent) {
         this.simplePresent = simplePresent;
     }
 
-    public List<String> getSimplePast() {
+    public Set<String> getSimplePast() {
         return simplePast;
     }
 
-    public void setSimplePast(List<String> simplePast) {
+    public void setSimplePast(Set<String> simplePast) {
         this.simplePast = simplePast;
     }
 
-    public List<String> getSimpleFuture() {
+    public Set<String> getSimpleFuture() {
         return simpleFuture;
     }
 
-    public void setSimpleFuture(List<String> simpleFuture) {
+    public void setSimpleFuture(Set<String> simpleFuture) {
         this.simpleFuture = simpleFuture;
     }
 
-    public List<String> getPresentProgressive() {
+    public Set<String> getPresentProgressive() {
         return presentProgressive;
     }
 
-    public void setPresentProgressive(List<String> presentProgressive) {
+    public void setPresentProgressive(Set<String> presentProgressive) {
         this.presentProgressive = presentProgressive;
     }
 
-    public List<String> getPastProgressive() {
+    public Set<String> getPastProgressive() {
         return pastProgressive;
     }
 
-    public void setPastProgressive(List<String> pastProgressive) {
+    public void setPastProgressive(Set<String> pastProgressive) {
         this.pastProgressive = pastProgressive;
     }
 
-    public List<String> getFutureProgressive() {
+    public Set<String> getFutureProgressive() {
         return futureProgressive;
     }
 
-    public void setFutureProgressive(List<String> futureProgressive) {
+    public void setFutureProgressive(Set<String> futureProgressive) {
         this.futureProgressive = futureProgressive;
     }
 
-    public List<String> getPresentPerfect() {
+    public Set<String> getPresentPerfect() {
         return presentPerfect;
     }
 
-    public void setPresentPerfect(List<String> presentPerfect) {
+    public void setPresentPerfect(Set<String> presentPerfect) {
         this.presentPerfect = presentPerfect;
     }
 
-    public List<String> getPastPerfect() {
+    public Set<String> getPastPerfect() {
         return pastPerfect;
     }
 
-    public void setPastPerfect(List<String> pastPerfect) {
+    public void setPastPerfect(Set<String> pastPerfect) {
         this.pastPerfect = pastPerfect;
     }
 
-    public List<String> getFuturePerfect() {
+    public Set<String> getFuturePerfect() {
         return futurePerfect;
     }
 
-    public void setFuturePerfect(List<String> futurePerfect) {
+    public void setFuturePerfect(Set<String> futurePerfect) {
         this.futurePerfect = futurePerfect;
     }
 
-    public List<String> getMixedTenses() {
+    public Set<String> getMixedTenses() {
         return mixedTenses;
     }
 
-    public void setMixedTenses(List<String> mixedTenses) {
+    public void setMixedTenses(Set<String> mixedTenses) {
         this.mixedTenses = mixedTenses;
     }
 
-    public List<String> getNonSentences() {
+    public Set<String> getNonSentences() {
         return nonSentences;
     }
 
-    public void setNonSentences(List<String> nonSentences) {
+    public void setNonSentences(Set<String> nonSentences) {
         this.nonSentences = nonSentences;
     }
 }

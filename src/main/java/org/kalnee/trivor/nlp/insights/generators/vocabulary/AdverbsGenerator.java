@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static org.kalnee.trivor.nlp.domain.InsightsEnum.ADVERBS_USAGE;
 import static org.kalnee.trivor.nlp.domain.TagsEnum.RB;
@@ -42,7 +43,7 @@ import static org.kalnee.trivor.nlp.domain.TagsEnum.RB;
  *
  * @since 0.0.1
  */
-public class AdverbsGenerator extends WordUsageGenerator implements Generator<List<WordUsage>> {
+public class AdverbsGenerator extends WordUsageGenerator implements Generator<Set<WordUsage>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdverbsGenerator.class);
 
@@ -57,8 +58,8 @@ public class AdverbsGenerator extends WordUsageGenerator implements Generator<Li
     }
 
     @Override
-    public List<WordUsage> generate(List<Sentence> sentences) {
-        final List<WordUsage> words = getSentences(sentences);
+    public Set<WordUsage> generate(List<Sentence> sentences) {
+        final Set<WordUsage> words = getSentences(sentences);
         LOGGER.info("{} - {}", getCode(), getExamples(words));
 
         return words;

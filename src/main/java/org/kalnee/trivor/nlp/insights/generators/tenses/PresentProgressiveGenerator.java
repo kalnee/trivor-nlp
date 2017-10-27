@@ -24,7 +24,6 @@ package org.kalnee.trivor.nlp.insights.generators.tenses;
 
 import org.kalnee.trivor.nlp.domain.InsightsEnum;
 import org.kalnee.trivor.nlp.domain.Sentence;
-import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.domain.TagsEnum;
 import org.kalnee.trivor.nlp.insights.generators.Generator;
 import org.kalnee.trivor.nlp.utils.CollectionUtils;
@@ -34,9 +33,10 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static java.lang.String.format;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * Present progressive verb tense insight generator.
@@ -45,7 +45,7 @@ import static java.util.stream.Collectors.toList;
  *
  * @since 0.0.1
  */
-public class PresentProgressiveGenerator implements Generator<List<String>> {
+public class PresentProgressiveGenerator implements Generator<Set<String>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PresentProgressiveGenerator.class);
 
@@ -62,15 +62,15 @@ public class PresentProgressiveGenerator implements Generator<List<String>> {
     }
 
     @Override
-    public List<String> generate(List<Sentence> sentences) {
-        final List<String> matchedSentences = sentences
+    public Set<String> generate(List<Sentence> sentences) {
+        final Set<String> matchedSentences = sentences
                 .stream()
                 .filter(s -> CollectionUtils.allMatch(s.getSentenceTags(), MUST_CONTAIN)
                         && CollectionUtils.anyMatch(s.getSentenceTags(), MUST_CONTAIN_TAGS)
                         && CollectionUtils.noneMatch(s.getSentenceTags(), MUST_NOT_CONTAIN)
                         && CollectionUtils.noneMatch(s.getSentence().toLowerCase(), MUST_NOT_CONTAIN_WORDS))
                 .map(Sentence::getSentence)
-                .collect(toList());
+                .collect(toSet());
 
         LOGGER.info(
                 format("%s: %d/%d (%.2f%%)", getCode(), matchedSentences.size(), sentences.size(),

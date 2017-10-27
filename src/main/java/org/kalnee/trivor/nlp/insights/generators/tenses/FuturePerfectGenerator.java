@@ -23,16 +23,16 @@
 package org.kalnee.trivor.nlp.insights.generators.tenses;
 
 import org.kalnee.trivor.nlp.domain.Sentence;
-import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.insights.generators.Generator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static java.lang.String.format;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.kalnee.trivor.nlp.domain.InsightsEnum.FUTURE_PERFECT;
 import static org.kalnee.trivor.nlp.domain.TagsEnum.*;
 import static org.kalnee.trivor.nlp.utils.CollectionUtils.allMatch;
@@ -45,7 +45,7 @@ import static org.kalnee.trivor.nlp.utils.CollectionUtils.anyMatch;
  *
  * @since 0.0.1
  */
-public class FuturePerfectGenerator implements Generator<List<String>> {
+public class FuturePerfectGenerator implements Generator<Set<String>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FuturePerfectGenerator.class);
 
@@ -62,13 +62,14 @@ public class FuturePerfectGenerator implements Generator<List<String>> {
     }
 
     @Override
-    public List<String> generate(List<Sentence> sentences) {
-        final List<String> matchedSentences = sentences.stream()
+    public Set<String> generate(List<Sentence> sentences) {
+        final Set<String> matchedSentences = sentences.stream()
                 .filter(s -> anyMatch(s.getSentence(), MUST_CONTAIN_HAVE)
                         && anyMatch(s.getSentence(), MUST_CONTAIN_MODAL)
                         && allMatch(s.getSentenceTags(), MUST_CONTAIN_ALL)
                         && anyMatch(s.getSentenceTags(), MUST_CONTAIN_ONE))
-                .map(Sentence::getSentence).collect(toList());
+                .map(Sentence::getSentence)
+                .collect(toSet());
 
         LOGGER.info(
                 format("%s: %d/%d (%.2f%%)", getCode(), matchedSentences.size(), sentences.size(),

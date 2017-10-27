@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import static org.kalnee.trivor.nlp.domain.InsightsEnum.NOUNS_USAGE;
 import static org.kalnee.trivor.nlp.domain.TagsEnum.NN;
@@ -45,7 +46,7 @@ import static org.kalnee.trivor.nlp.utils.LanguageUtils.MOST_COMMON_WORDS;
  *
  * @since 0.0.1
  */
-public class NounsGenerator extends WordUsageGenerator implements Generator<List<WordUsage>> {
+public class NounsGenerator extends WordUsageGenerator implements Generator<Set<WordUsage>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(NounsGenerator.class);
 
@@ -60,8 +61,8 @@ public class NounsGenerator extends WordUsageGenerator implements Generator<List
 	}
 
 	@Override
-	public List<WordUsage> generate(List<Sentence> sentences) {
-		final List<WordUsage> words = getSentences(sentences, w -> !MOST_COMMON_WORDS.contains(w));
+	public Set<WordUsage> generate(List<Sentence> sentences) {
+		final Set<WordUsage> words = getSentences(sentences, w -> !MOST_COMMON_WORDS.contains(w));
 		LOGGER.info("{} - {}", getCode(), getExamples(words));
 
     	return words;

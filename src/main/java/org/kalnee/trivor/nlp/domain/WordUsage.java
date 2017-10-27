@@ -64,5 +64,20 @@ public class WordUsage {
                 ", sentences=" + sentences.stream().limit(2).collect(toSet()) +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WordUsage wordUsage = (WordUsage) o;
+
+        return word != null ? word.equals(wordUsage.word) : wordUsage.word == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return word != null ? word.hashCode() : 0;
+    }
 }
 

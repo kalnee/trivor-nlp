@@ -30,6 +30,7 @@ import org.kalnee.trivor.nlp.utils.TestUtils;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
@@ -48,7 +49,7 @@ public class SimplePastGeneratorTest {
   @Test
   public void testFindSimplePast() throws IOException {
     final SimplePastGenerator spg = new SimplePastGenerator();
-    final List<String> insight = spg.generate(getSubtitle().getSentences());
+    final Set<String> insight = spg.generate(getSubtitle().getSentences());
 
     assertTrue("should've have identified 3 sentences", 3 == insight.size());
   }
