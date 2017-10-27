@@ -15,7 +15,7 @@ After processing all sentences, several generators will produce valuable informa
 <dependency>
   <groupId>org.kalnee</groupId>
   <artifactId>trivor-nlp</artifactId>
-  <version>0.0.1-alpha.0</version>
+  <version>0.0.1-alpha.1</version>
 </dependency>
 ```
 
