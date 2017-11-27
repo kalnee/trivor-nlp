@@ -15,7 +15,7 @@ After processing all sentences, several generators will produce valuable informa
 <dependency>
   <groupId>org.kalnee</groupId>
   <artifactId>trivor-nlp</artifactId>
-  <version>0.0.1-alpha.1</version>
+  <version>0.0.1-alpha.2</version>
 </dependency>
 ```
 
@@ -26,11 +26,7 @@ After processing all sentences, several generators will produce valuable informa
 - `TranscriptProcessor`: general-purpose processor, the content must be accessed either via URI or String.
 - `SubtitleProcessor`: subtitle-only processor, the content must be accessed via URI.
 
-Accepted URI schemas:
-
-- file://
-- jar://
-- s3:// _Make sure to have the AWS Credentials in place._
+Accepted URI schemas: file://, jar:// and s3:// (_Make sure to have the AWS Credentials in place._)
 
 #### Create a TranscriptProcessor from URI or String
 
@@ -43,8 +39,9 @@ TranscriptProcessor tp = new TranscriptProcessor.Builder(uri).build();
 // from String
 TranscriptProcessor tp = new TranscriptProcessor.Builder("This is a sentence.").build();
 ```
+#### Customize
 
-#### Custom filters and mappers
+##### Filters and mappers
 
 For each line in the provided content, custom filters and mappers can be used to clean up the text before running the NLP 
 models. Both fields are optional.
@@ -53,6 +50,20 @@ models. Both fields are optional.
 TranscriptProcessor tp = new TranscriptProcessor.Builder(uri)
         .withFilters(singletonList(line -> !line.contains("Name")))
         .withMappers(singletonList(line -> line.replaceAll(TRANSCRIPT_REGEX, EMPTY)))
+        .build();
+```
+
+##### Settings
+
+The following values can be overwritten by adding the `Config` class when building a `Processor`:
+
+- Vocabulary probability: `Double` (default: 0.9) _e.g. it'll only be accepted verbs with a probability >= 90%_
+- Chunk probability: `Double` (default: 0.5)
+- Run Sentiment Analysis: `Boolean` (default: true)
+
+```java
+TranscriptProcessor tp = new TranscriptProcessor.Builder(uri)
+        .withConfig(new Config.Builder().vocabularyProb(.98).chunkProb(.98).sentimentAnalysis(false).build())
         .build();
 ```
 
@@ -141,7 +152,6 @@ This method return a `Result` object with many different insights such as:
 - Frequent Sentences
 - Frequent Chunks
 - Vocabulary
-- Verb Tenses
 - Phrasal Verbs
 - Sentiment Analysis
 
