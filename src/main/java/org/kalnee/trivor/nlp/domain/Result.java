@@ -38,7 +38,6 @@ public class Result {
     private Set<PhrasalVerbUsage> phrasalVerbs;
 
     private Vocabulary vocabulary;
-    private VerbTenses verbTenses;
 
     public Integer getNumberOfSentences() {
         return numberOfSentences;
@@ -102,13 +101,5 @@ public class Result {
 
     public void setVocabulary(Vocabulary vocabulary) {
         this.vocabulary = vocabulary;
-    }
-
-    public VerbTenses getVerbTenses() {
-        return verbTenses;
-    }
-
-    public void setVerbTenses(VerbTenses verbTenses) {
-        this.verbTenses = verbTenses;
     }
 }

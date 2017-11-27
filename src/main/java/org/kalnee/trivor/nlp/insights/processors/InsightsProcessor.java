@@ -25,7 +25,6 @@ package org.kalnee.trivor.nlp.insights.processors;
 import org.apache.commons.lang3.time.StopWatch;
 import org.kalnee.trivor.nlp.domain.*;
 import org.kalnee.trivor.nlp.insights.generators.*;
-import org.kalnee.trivor.nlp.insights.generators.tenses.*;
 import org.kalnee.trivor.nlp.insights.generators.vocabulary.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,20 +91,6 @@ class InsightsProcessor {
         vocabulary.setWhWords(new WhWordsGenerator(config).generate(sentences));
         result.setVocabulary(vocabulary);
         result.setPhrasalVerbs(new PhrasalVerbsGenerator(vocabulary.getVerbs()).generate(sentences));
-
-        final VerbTenses verbTenses = new VerbTenses();
-        verbTenses.setSimplePresent(new SimplePresentGenerator().generate(sentences));
-        verbTenses.setSimplePast(new SimplePastGenerator().generate(sentences));
-        verbTenses.setSimpleFuture(new SimpleFutureGenerator().generate(sentences));
-        verbTenses.setPresentProgressive(new PresentProgressiveGenerator().generate(sentences));
-        verbTenses.setPastProgressive(new PastProgressiveGenerator().generate(sentences));
-        verbTenses.setFutureProgressive(new FutureProgressiveGenerator().generate(sentences));
-        verbTenses.setPresentPerfect(new PresentPerfectGenerator().generate(sentences));
-        verbTenses.setPastPerfect(new PastPerfectGenerator().generate(sentences));
-        verbTenses.setFuturePerfect(new FuturePerfectGenerator().generate(sentences));
-        verbTenses.setNonSentences(new NonSentencesGenerator().generate(sentences));
-        verbTenses.setMixedTenses(new MixedTensesGenerator(verbTenses).generate(sentences));
-        result.setVerbTenses(verbTenses);
 
         return result;
     }
