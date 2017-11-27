@@ -28,7 +28,7 @@ import org.kalnee.trivor.nlp.domain.Result;
 import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.domain.Subtitle;
 import org.kalnee.trivor.nlp.domain.Token;
-import org.kalnee.trivor.nlp.nlp.models.Chunk;
+import org.kalnee.trivor.nlp.domain.Chunk;
 
 import java.net.URISyntaxException;
 import java.util.Arrays;

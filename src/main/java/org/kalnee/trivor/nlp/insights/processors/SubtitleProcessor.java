@@ -22,6 +22,7 @@
 
 package org.kalnee.trivor.nlp.insights.processors;
 
+import org.kalnee.trivor.nlp.domain.Config;
 import org.kalnee.trivor.nlp.domain.Result;
 import org.kalnee.trivor.nlp.domain.Subtitle;
 import org.slf4j.Logger;
@@ -64,10 +65,10 @@ public class SubtitleProcessor extends Processor {
     private Result result;
     private Integer duration;
 
-    private SubtitleProcessor(URI uri, Integer duration) {
-        super(uri);
+    private SubtitleProcessor(URI uri, Integer duration, Config config) {
+        super(uri, config);
         this.duration = duration;
-        this.insightsProcessor = new InsightsProcessor();
+        this.insightsProcessor = new InsightsProcessor(config);
     }
 
     @Override
@@ -116,6 +117,7 @@ public class SubtitleProcessor extends Processor {
     public static class Builder {
         private final URI uri;
         private Integer duration;
+        private Config config;
 
         public Builder(URI uri) {
             this.uri = uri;
@@ -126,8 +128,13 @@ public class SubtitleProcessor extends Processor {
             return this;
         }
 
+        public Builder withConfig(Config config) {
+            this.config = config;
+            return this;
+        }
+
         public SubtitleProcessor build() {
-            final SubtitleProcessor subtitleProcessor = new SubtitleProcessor(uri, duration);
+            final SubtitleProcessor subtitleProcessor = new SubtitleProcessor(uri, duration, config);
             subtitleProcessor.process();
             return subtitleProcessor;
         }

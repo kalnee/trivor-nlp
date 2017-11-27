@@ -22,6 +22,7 @@
 
 package org.kalnee.trivor.nlp.insights.processors;
 
+import org.kalnee.trivor.nlp.domain.Config;
 import org.kalnee.trivor.nlp.domain.Result;
 import org.kalnee.trivor.nlp.domain.Transcript;
 import org.slf4j.Logger;
@@ -31,6 +32,7 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -38,29 +40,31 @@ public class TranscriptProcessor extends Processor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TranscriptProcessor.class);
 
-    private final InsightsProcessor insightsProcessor = new InsightsProcessor();
+    private final InsightsProcessor insightsProcessor;
 
     private List<Function<String, String>> mappers;
     private List<Predicate<String>> filters;
     private Transcript transcript;
     private Result result;
 
-    private TranscriptProcessor(URI uri) {
-        super(uri);
+    private TranscriptProcessor(URI uri, Config config) {
+        super(uri, config);
+        this.insightsProcessor = new InsightsProcessor(config);
     }
 
-    private TranscriptProcessor(String content) {
-        super(content);
+    private TranscriptProcessor(String content, Config config) {
+        super(content, config);
+        this.insightsProcessor = new InsightsProcessor(config);
     }
 
-    TranscriptProcessor(URI uri, List<Function<String, String>> mappers, List<Predicate<String>> filters) {
-        this(uri);
+    TranscriptProcessor(URI uri, List<Function<String, String>> mappers, List<Predicate<String>> filters, Config config) {
+        this(uri, config);
         this.mappers = mappers;
         this.filters = filters;
     }
 
-    TranscriptProcessor(String content, List<Function<String, String>> mappers, List<Predicate<String>> filters) {
-        this(content);
+    TranscriptProcessor(String content, List<Function<String, String>> mappers, List<Predicate<String>> filters, Config config) {
+        this(content, config);
         this.mappers = mappers;
         this.filters = filters;
     }
@@ -96,6 +100,7 @@ public class TranscriptProcessor extends Processor {
         private String content;
         private List<Function<String, String>> mappers = Collections.emptyList();
         private List<Predicate<String>> filters = Collections.emptyList();
+        private Config config;
 
         public Builder(URI uri) {
             this.uri = uri;
@@ -115,6 +120,11 @@ public class TranscriptProcessor extends Processor {
             return this;
         }
 
+        public Builder withConfig(Config config) {
+            this.config = config;
+            return this;
+        }
+
         public TranscriptProcessor build() {
             if (Objects.isNull(uri) && Objects.isNull(content)) {
                 throw new IllegalStateException("uri or content must be provided");
@@ -123,9 +133,9 @@ public class TranscriptProcessor extends Processor {
             TranscriptProcessor transcriptProcessor;
 
             if (!Objects.isNull(uri)) {
-                transcriptProcessor = new TranscriptProcessor(uri, mappers, filters);
+                transcriptProcessor = new TranscriptProcessor(uri, mappers, filters, config);
             } else {
-                transcriptProcessor = new TranscriptProcessor(content, mappers, filters);
+                transcriptProcessor = new TranscriptProcessor(content, mappers, filters, config);
             }
             transcriptProcessor.process();
             return transcriptProcessor;

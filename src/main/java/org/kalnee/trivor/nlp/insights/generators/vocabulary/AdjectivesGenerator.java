@@ -22,6 +22,7 @@
 
 package org.kalnee.trivor.nlp.insights.generators.vocabulary;
 
+import org.kalnee.trivor.nlp.domain.Config;
 import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.domain.WordUsage;
 import org.kalnee.trivor.nlp.insights.generators.Generator;
@@ -39,14 +40,18 @@ import static org.kalnee.trivor.nlp.utils.LanguageUtils.NOT_ADJECTIVES;
 /**
  * Sentence generator for adjectives.
  *
- * @see WordUsageGenerator
+ * @see VocabularyGenerator
  * @see Generator
  *
  * @since 0.0.1
  */
-public class AdjectivesGenerator extends WordUsageGenerator implements Generator<Set<WordUsage>> {
+public class AdjectivesGenerator extends VocabularyGenerator implements Generator<Set<WordUsage>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdjectivesGenerator.class);
+
+	public AdjectivesGenerator(Config config) {
+		super(config);
+	}
 
 	@Override
 	List<String> getTags() {

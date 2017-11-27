@@ -25,6 +25,7 @@ package org.kalnee.trivor.nlp.nlp.models;
 import opennlp.tools.chunker.ChunkerME;
 import opennlp.tools.chunker.ChunkerModel;
 import opennlp.tools.util.Span;
+import org.kalnee.trivor.nlp.domain.Chunk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,11 +41,16 @@ public class Chunker {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Chunker.class);
     private static final String MODEL = "/nlp/models/en-chunker.bin";
-    private static final double THRESHOLD = 0;
+    private final Double threshold;
 
     private ChunkerME chunker;
 
     public Chunker() {
+        this(0.5);
+    }
+
+    public Chunker(Double threshold) {
+        this.threshold = threshold;
         try (InputStream modelStream = Chunker.class.getResourceAsStream(MODEL)) {
             ChunkerModel chunkerModel = new ChunkerModel(modelStream);
             chunker = new ChunkerME(chunkerModel);
@@ -64,7 +70,7 @@ public class Chunker {
         for (final Span span : spans) {
             boolean valid = true;
             for (int j = span.getStart(); j < span.getEnd(); j++) {
-                if (chunker.probs()[j] < THRESHOLD || probs.get(j) < THRESHOLD) {
+                if (chunker.probs()[j] < threshold || probs.get(j) < threshold) {
                     valid = false;
                     break;
                 }

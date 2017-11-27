@@ -32,14 +32,14 @@ import java.util.Set;
 
 import static org.junit.Assert.assertTrue;
 
-public class WordUsageGeneratorTest {
+public class VocabularyGeneratorTest {
 
     private static SubtitleProcessor sp;
 
     @BeforeClass
     public static void setUp() throws URISyntaxException {
         sp = new SubtitleProcessor
-                .Builder(WordUsageGeneratorTest.class.getResource("/language/tt0238784-S01E01.srt").toURI())
+                .Builder(VocabularyGeneratorTest.class.getResource("/language/tt0238784-S01E01.srt").toURI())
                 .withDuration(42)
                 .build();
     }

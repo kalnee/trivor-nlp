@@ -22,6 +22,7 @@
 
 package org.kalnee.trivor.nlp.insights.generators.vocabulary;
 
+import org.kalnee.trivor.nlp.domain.Config;
 import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.domain.WordUsage;
 import org.kalnee.trivor.nlp.insights.generators.Generator;
@@ -38,14 +39,18 @@ import static org.kalnee.trivor.nlp.domain.TagsEnum.*;
 /**
  * Sentence generator for wh words.
  *
- * @see WordUsageGenerator
+ * @see VocabularyGenerator
  * @see Generator
  *
  * @since 0.0.1
  */
-public class WhWordsGenerator extends WordUsageGenerator implements Generator<Set<WordUsage>> {
+public class WhWordsGenerator extends VocabularyGenerator implements Generator<Set<WordUsage>> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WhWordsGenerator.class);
+
+    public WhWordsGenerator(Config config) {
+        super(config);
+    }
 
     @Override
     List<String> getTags() {

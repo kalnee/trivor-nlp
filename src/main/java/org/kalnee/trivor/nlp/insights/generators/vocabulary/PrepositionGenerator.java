@@ -22,10 +22,7 @@
 
 package org.kalnee.trivor.nlp.insights.generators.vocabulary;
 
-import org.kalnee.trivor.nlp.domain.InsightsEnum;
-import org.kalnee.trivor.nlp.domain.Sentence;
-import org.kalnee.trivor.nlp.domain.TagsEnum;
-import org.kalnee.trivor.nlp.domain.WordUsage;
+import org.kalnee.trivor.nlp.domain.*;
 import org.kalnee.trivor.nlp.insights.generators.Generator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,14 +34,18 @@ import java.util.Set;
 /**
  * Sentence generator for prepositions.
  *
- * @see WordUsageGenerator
+ * @see VocabularyGenerator
  * @see Generator
  *
  * @since 0.0.1
  */
-public class PrepositionGenerator extends WordUsageGenerator implements Generator<Set<WordUsage>> {
+public class PrepositionGenerator extends VocabularyGenerator implements Generator<Set<WordUsage>> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PrepositionGenerator.class);
+
+	public PrepositionGenerator(Config config) {
+		super(config);
+	}
 
 	@Override
 	List<String> getTags() {

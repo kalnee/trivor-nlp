@@ -22,6 +22,7 @@
 
 package org.kalnee.trivor.nlp;
 
+import org.kalnee.trivor.nlp.domain.Config;
 import org.kalnee.trivor.nlp.insights.processors.SubtitleProcessor;
 import org.kalnee.trivor.nlp.insights.processors.TranscriptProcessor;
 
@@ -39,6 +40,7 @@ public class Main {
         SubtitleProcessor sp = new SubtitleProcessor
                 .Builder(Main.class.getResource("/language/s1e1.srt").toURI())
                 .withDuration(43)
+                .withConfig(new Config.Builder().chunkProb(.98).sentimentAnalysis(false).vocabularyProb(.98).build())
                 .build();
 
         TranscriptProcessor tp = new TranscriptProcessor

@@ -22,8 +22,6 @@
 
 package org.kalnee.trivor.nlp.domain;
 
-import org.kalnee.trivor.nlp.nlp.models.Chunk;
-
 import java.util.List;
 
 import static java.util.stream.Collectors.joining;

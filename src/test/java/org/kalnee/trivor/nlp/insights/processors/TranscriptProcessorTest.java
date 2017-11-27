@@ -23,6 +23,7 @@
 package org.kalnee.trivor.nlp.insights.processors;
 
 import org.junit.Test;
+import org.kalnee.trivor.nlp.domain.Config;
 import org.mockito.internal.util.reflection.Whitebox;
 
 import java.net.URI;
@@ -63,5 +64,17 @@ public class TranscriptProcessorTest {
         String content = (String) Whitebox.getInternalState(transcriptProcessor, "content");
 
         assertTrue(content.startsWith("NO GOAL!!!"));
+    }
+
+    @Test
+    public void testConfig() throws URISyntaxException {
+        TranscriptProcessor transcriptProcessor = new TranscriptProcessor.Builder(
+                "This is a very good transcript with many sentences."
+        ).withConfig(new Config.Builder().chunkProb(1.).vocabularyProb(1.).sentimentAnalysis(false).build())
+         .build();
+
+        assertTrue(transcriptProcessor.getSentences().get(0).getChunks().isEmpty());
+        assertTrue(transcriptProcessor.getResult().getVocabulary().getVerbs().isEmpty());
+        assertTrue(transcriptProcessor.getResult().getSentimentAnalysis().isEmpty());
     }
 }

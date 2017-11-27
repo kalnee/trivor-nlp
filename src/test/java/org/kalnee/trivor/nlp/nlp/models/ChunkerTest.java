@@ -24,6 +24,7 @@ package org.kalnee.trivor.nlp.nlp.models;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.kalnee.trivor.nlp.domain.Chunk;
 
 import java.util.Arrays;
 import java.util.List;

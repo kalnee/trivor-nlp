@@ -1,8 +1,6 @@
 package org.kalnee.trivor.nlp.insights.processors;
 
-import org.kalnee.trivor.nlp.domain.Sentence;
-import org.kalnee.trivor.nlp.domain.SentimentEnum;
-import org.kalnee.trivor.nlp.domain.Token;
+import org.kalnee.trivor.nlp.domain.*;
 import org.kalnee.trivor.nlp.handlers.FileHandler;
 import org.kalnee.trivor.nlp.handlers.FileHandlerFactory;
 import org.kalnee.trivor.nlp.nlp.models.*;
@@ -32,22 +30,30 @@ public abstract class Processor {
 
     private URI uri;
     private String content;
+    private final Config config;
 
     private final SentenceDetector sentenceDetector = new SentenceDetector();
     private final SimpleTokenizer tokenizer = new SimpleTokenizer();
     private final POSTagger tagger = new POSTagger();
     private final Lemmatizer lemmatizer = new Lemmatizer();
-    private final Chunker chunker = new Chunker();
     private final SentimentAnalyser sentimentAnalyser = new SentimentAnalyser();
+    private final Chunker chunker;
 
     private Map<SentimentEnum, BigDecimal> sentiment;
     private List<Sentence> sentences = new ArrayList<>();
 
-    Processor(URI uri) {
+    private Processor(Config config) {
+        this.config = config != null ? config : new Config();
+        this.chunker = new Chunker(this.config.getChunkProb());
+    }
+
+    Processor(URI uri, Config config) {
+        this(config);
         this.uri = uri;
     }
 
-    Processor(String content) {
+    Processor(String content, Config config) {
+        this(config);
         this.content = content;
     }
 
@@ -97,9 +103,11 @@ public abstract class Processor {
             return new Sentence(s, tokens, chunks);
         }).collect(toList());
 
-        sentiment = sentimentAnalyser.categorize(
-                sentences.stream().map(Sentence::getSentence).collect(toList())
-        );
+        if (config.getSentimentAnalysis()) {
+            sentiment = sentimentAnalyser.categorize(
+                    sentences.stream().map(Sentence::getSentence).collect(toList())
+            );
+        }
 
         LOGGER.info("File processed successfully");
     }

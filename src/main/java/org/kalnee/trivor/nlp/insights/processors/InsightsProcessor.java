@@ -35,8 +35,14 @@ import java.util.List;
 class InsightsProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InsightsProcessor.class);
+    private final Config config;
 
     InsightsProcessor() {
+        this(new Config());
+    }
+
+    InsightsProcessor(Config config) {
+        this.config = config != null ? config : new Config();
     }
 
     Result process(Transcript transcript) {
@@ -75,15 +81,15 @@ class InsightsProcessor {
         result.setFrequencyRate(new FrequencyRateGenerator().generate(sentences));
 
         final Vocabulary vocabulary = new Vocabulary();
-        vocabulary.setAdjectives(new AdjectivesGenerator().generate(sentences));
-        vocabulary.setAdverbs(new AdverbsGenerator().generate(sentences));
-        vocabulary.setComparatives(new ComparativesGenerator().generate(sentences));
-        vocabulary.setModals(new ModalsGenerator().generate(sentences));
-        vocabulary.setNouns(new NounsGenerator().generate(sentences));
-        vocabulary.setPrepositions(new PrepositionGenerator().generate(sentences));
-        vocabulary.setSuperlatives(new SuperlativesGenerator().generate(sentences));
-        vocabulary.setVerbs(new VerbsGenerator().generate(sentences));
-        vocabulary.setWhWords(new WhWordsGenerator().generate(sentences));
+        vocabulary.setAdjectives(new AdjectivesGenerator(config).generate(sentences));
+        vocabulary.setAdverbs(new AdverbsGenerator(config).generate(sentences));
+        vocabulary.setComparatives(new ComparativesGenerator(config).generate(sentences));
+        vocabulary.setModals(new ModalsGenerator(config).generate(sentences));
+        vocabulary.setNouns(new NounsGenerator(config).generate(sentences));
+        vocabulary.setPrepositions(new PrepositionGenerator(config).generate(sentences));
+        vocabulary.setSuperlatives(new SuperlativesGenerator(config).generate(sentences));
+        vocabulary.setVerbs(new VerbsGenerator(config).generate(sentences));
+        vocabulary.setWhWords(new WhWordsGenerator(config).generate(sentences));
         result.setVocabulary(vocabulary);
         result.setPhrasalVerbs(new PhrasalVerbsGenerator(vocabulary.getVerbs()).generate(sentences));
 

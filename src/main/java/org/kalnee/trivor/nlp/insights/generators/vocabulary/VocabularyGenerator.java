@@ -22,6 +22,7 @@
 
 package org.kalnee.trivor.nlp.insights.generators.vocabulary;
 
+import org.kalnee.trivor.nlp.domain.Config;
 import org.kalnee.trivor.nlp.domain.Sentence;
 import org.kalnee.trivor.nlp.domain.Token;
 import org.kalnee.trivor.nlp.domain.WordUsage;
@@ -36,10 +37,14 @@ import static java.util.Collections.reverseOrder;
 import static java.util.Comparator.comparingInt;
 import static java.util.stream.Collectors.toSet;
 
-abstract class WordUsageGenerator {
+abstract class VocabularyGenerator {
 
     private static final String WORD_REGEX = "([a-zA-Z]{2,})";
-    private static final double ACCEPTED_PROB = 0.90;
+    private final Config config;
+
+    public VocabularyGenerator(Config config) {
+        this.config = config;
+    }
 
     abstract List<String> getTags();
 
@@ -59,7 +64,7 @@ abstract class WordUsageGenerator {
                     .filter(t -> t.getToken().matches(WORD_REGEX))
                     .filter(t -> getTags().contains(t.getTag()))
                     .filter(t -> !isUpperCase(t.getToken().charAt(0)))
-                    .filter(t -> t.getProb() >= ACCEPTED_PROB)
+                    .filter(t -> t.getProb() >= config.getVocabularyProb())
                     .map(customMapper);
 
             if (customFilter != null) {
