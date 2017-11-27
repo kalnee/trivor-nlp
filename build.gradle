@@ -13,7 +13,7 @@ apply plugin: 'idea'
 apply plugin: 'maven-publish'
 apply plugin: 'maven'
 
-version = "0.0.1-alpha.1"
+version = "0.0.1-alpha.2"
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
